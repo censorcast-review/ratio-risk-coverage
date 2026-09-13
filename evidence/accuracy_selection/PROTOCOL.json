@@ -1,0 +1,58 @@
+{
+  "bootstrap": "paired item clusters, 4000 draws, percentile descriptive intervals conditional on fits",
+  "calibration_a": [
+    1611,
+    1645
+  ],
+  "calibration_b": [
+    1646,
+    1673
+  ],
+  "cap": 0.64012983268,
+  "created_utc": "2026-09-08T20:30:45.347582+00:00",
+  "evaluation": [
+    1800,
+    1913
+  ],
+  "head_spec": {
+    "learning_rate": 0.05,
+    "leaves": 31,
+    "n_jobs": 4,
+    "objective": "squared_error",
+    "training_rows": 600000,
+    "trees": 220
+  },
+  "inputs": {
+    "base": "2527c577cb863cbb72c3af6c78509b179aa70543ea5c170f6564449541d34c90",
+    "data": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "policy": "43a824da27f18d32894fc1c18b5a35f300ae6b4fded128abad3068ab164b0fdb",
+    "risk": "5b232c67bb3fde0ab28d280857ad09014a4947a947ae3c93da5892b96226a60f",
+    "stack": "6dec2a81d752df773502918ccc88b0e00495dc1422826086678918a0e6bf05f3"
+  },
+  "lambdas": [
+    1.0,
+    0.25,
+    0.0
+  ],
+  "new_holdout_openings": 0,
+  "notes": "Pure-demand lambda=0 has no positive denominator floor; infeasible scores/policies are reported, not replaced.",
+  "planned_contrasts": [
+    "lambda .25 minus 1",
+    "lambda 0 minus 1"
+  ],
+  "predictors": [
+    "group_l1",
+    "learned_l1",
+    "chronos2_univariate_raw"
+  ],
+  "row_floor": 0.35,
+  "script_sha256": "e10cab0b98e21dfbbaad703544a26c9b2a89e3de1c7735ad354a903476bca1b9",
+  "seed": 20260908,
+  "selection": "largest common feasible threshold across two calibration blocks; all unique scores; no model/hyperparameter selection",
+  "status": "retrospective; all evaluation dates previously consumed",
+  "target_information": "retained pre-censoring Y for error/demand heads and threshold calibration; forecasts fit observed sales, postprocessors calibrated with retained Y",
+  "training_targets": [
+    1555,
+    1610
+  ]
+}

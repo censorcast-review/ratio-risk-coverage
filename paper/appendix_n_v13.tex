@@ -1,0 +1,185 @@
+% Integrated Appendix N. Tables are derived from retained v13 JSON records.
+% All v13 labels are namespaced. Requires the main paper's amsmath/booktabs/float packages.
+\section{Frozen non-WAPE tests and learned gates}
+\label{app:v13-nonwape}
+
+\subsection{Scope, prediction sets, and the frozen design}
+\label{sec:v13-design}
+These two external tests examine fixed multi-label prediction with whole-example abstention. They were specified after the M5 and Dominick's results were known; they neither replace the Dominick's trial nor turn the earlier analyses into prospective evidence. Bibtex and Mediamill were both selected before raw acquisition, with no result-based replacement. A local timestamped protocol and five implementation files were frozen before either raw archive was downloaded. Public benchmark metadata, including label cardinalities, had been seen. This is a before-download code/protocol freeze, not public-registry preregistration or a claim that all public information was unseen.
+
+We use the official Mulan train/test archives, retaining their partitions. Within official training rows, a label-independent SHA256 ordering assigns the first $\lfloor .7n\rfloor$ rows to predictor training T and the remainder to head/gate training H. Within official test rows, the first and second $\lfloor n/3\rfloor$ rows are A and B; the remainder form final evaluation E (Later). Table~\ref{tab:v13-roles} gives every role size. Hash inputs consist of a frozen study identifier, dataset, original partition, and source row index. These are hash splits, not chronological windows. Raw parsing materializes labels; the separation is in their use for fitting, design, screening, and evaluation. A policy records precede B calculations, which precede E calculations.
+
+\begin{table}[H]\centering\small
+\caption{Non-WAPE data and role sizes. $p$ is the feature count and $K$ the label count. Official train/test totals are 4,880/2,515 for Bibtex and 30,993/12,914 for Mediamill.}
+\label{tab:v13-roles}
+\begin{tabular}{lrrrrrrr}\toprule
+Dataset & $p$ & $K$ & T & H & A & B & E\\\midrule
+Bibtex & 1836 & 159 & 3,416 & 1,464 & 838 & 838 & 839 \\
+Mediamill & 120 & 101 & 21,695 & 9,298 & 4,304 & 4,304 & 4,306 \\
+\bottomrule\end{tabular}
+\end{table}
+
+For each label, an L2 logistic classifier uses $C=1$, the liblinear solver, tolerance $10^{-4}$, at most 1,000 iterations, and no class weights. Feature scaling is fitted on T only, without centering. A label constant on T receives probability $(n_{+,T}+1)/(n_T+2)$. We retain labels with predicted probability at least $.5$. If this set is empty, the maximum-probability label is retained, with source label order resolving exact ties. This forced top-one convention was frozen in advance; it differs from the earlier Yeast convention that freely accepts zero-loss, zero-exposure examples. It ensures a nonempty set and hence a defined positive exposure for every row, but also changes the base prediction task. It is therefore part of the result's scope, not innocuous numerical preprocessing.
+
+For a fixed predicted-label set, $w$ is its size and $\ell$ is the number of false positives. Whole-example acceptance keeps or rejects the complete set. The ratio $\sum_i a_i\ell_i/\sum_i a_iw_i$ is one minus micro-precision. Exposure coverage measures retained predicted positives, not recall or coverage of true labels. Unlike retail demand, $w\geq1$ is exactly known when deciding whether to accept; no exposure head is fitted. The error head is an ExtraTrees regressor fitted on H with 220 trees, at most 31 leaves per tree, minimum leaf size 10, all features available, no bootstrap, and predictions clipped to $[0,w]$. Every selector uses the same T-scaled features augmented with $\log(1+w)$. Dataset seeds are 20260913 and 20260914, respectively. There is one classifier seed per dataset and no validation tuning or early stopping; no classifier convergence warning was recorded.
+
+The five ascending scores are Error $\hat e$, Excess $\hat e-rw$, Ratio $\hat e/w$, Descending $-w$, and
+\begin{equation}
+ s_{\lambda}(x)=\frac{\hat e(x)-rw(x)}{\lambda+(1-\lambda)w(x)/\bar w_H},
+ \qquad \lambda=.5,\qquad \bar w_H=|H|^{-1}\sum_{i\in H}w_i.
+ \label{eq:v13-mixed}
+\end{equation}
+The case coefficient $\lambda=.5$ was frozen for these two tests. The earlier retail menu, including Dominick's, uses $\lambda=.25$ in Eq.~\ref{eq:mixed}; that value is examined separately in Section~\ref{sec:v13-lambda}. No denominator floor or tolerance-band alternative enters the frozen tests.
+
+A alone sets $r=.95R_{\mathrm{all},A}$: $.44285714$ for Bibtex and $.22880705$ for Mediamill. Each score retains its largest A-feasible prefix at design risk $.95r$ and case coverage at least $.40$. The design caps are $.42071429$ and $.21736670$. A common outcome-independent hash orders score ties; the stored boundary is a score/hash pair. Utility selects among eligible menu members by A case or exposure coverage, with exact utility ties resolved in the declared order Error, Excess, Mixed, Ratio, Descending. The two custom learned gates use the same A feasibility rule. These cap, tightening, and floor conventions agree with Dominick's; they differ from the primary M5 cap based on both A and B and its $.35$ floor. Shared cap conventions do not make the tasks, tie handling, sampling units, or uncertainty families identical. We preserve each frozen design rather than retuning it for agreement across datasets.
+
+\subsection{Learned-gate comparator}
+\label{sec:v13-gate-design}
+The comparator is a custom primal-dual multilayer perceptron with 32 and 16 ReLU hidden units and a sigmoid acceptance output $a_\theta$. GateCase and GateExposure share initialization within each dataset. The predictor remains fixed. Training uses H rows, with the A-derived cap entering only as a scalar. For $u_i=1$ or $w_i/\bar w_H$, the objective is
+\begin{equation}
+ -\overline{a_\theta u}_{H}
+ +\alpha\,\frac{\overline{a_\theta(\ell-rw)}_{H}}{\bar w_H}
+ +\gamma\bigl(.40-\overline{a_\theta}_{H}\bigr),
+ \qquad \alpha,\gamma\geq0.
+ \label{eq:v13-gate-objective}
+\end{equation}
+The 40-epoch, float64 training uses minibatch Adam with batch size 2,048, learning rate $.003$, weight decay $.0001$, gradient norm clipping at 5, and feature clipping to $[-10,10]$. Once per epoch, full-H dual ascent has step $.2$ and duals clipped to $[0,100]$, starting at $\alpha=\min(1/r,100)$ and $\gamma=0$. Negative gate logits define ascending scores for the same A threshold search. Training traces and all fitted weights are retained. This is a fixed-predictor learned-selector comparison, not a SelectiveNet reproduction, joint predictor training, or evidence that the soft optimization converged to a constrained optimum. One untuned architecture cannot establish the relative merits of learned selectors in general.
+
+\subsection{Screening, contrasts, and all candidate outcomes}
+\label{sec:v13-inference}
+B screens the already fixed policies without fallback or reselection. Its statistic is the mean signed excess
+\begin{equation}
+ \widehat G_B(a)=\frac{1}{n_B}\sum_{i\in B}a_i(\ell_i-rw_i).
+ \label{eq:v13-signed-screen}
+\end{equation}
+The paired row multinomial bootstrap uses 20,000 draws and the linear-interpolated upper quantile $1-.05/14=.9964285714$, retaining the declared family of seven candidates on each of two datasets even when a candidate is A-ineligible. A pass requires A eligibility, positive accepted exposure in every resample, and upper $\widehat G_B<0$. Table~\ref{tab:v13-candidates} reports B point risk alongside this upper bound. The bound is in false-positive-count units per row, not risk units; it is compared with zero, not with $r$.
+
+E uses 20,000 paired row resamples, independently seeded from B. Exposure coverage is recomputed as the ratio of resampled sums. The four primary contrasts (two utilities, two datasets) use marginal 98.75\% intervals, with quantiles $.00625$ and $.99375$. The eight declared gate-minus-menu slots use marginal 99.375\% intervals, with quantiles $.003125$ and $.996875$; two slots remain unavailable because Mediamill GateCase is A-ineligible. Each of these two contrast families and the B screen is adjusted separately. They do not combine into one simultaneous 95\% claim, nor do these bootstrap summaries establish population risk control. Bootstrap seeds are the dataset seed times 100 plus 1 for B and plus 2 for E.
+
+The declared dataset-level joint criterion requires both A-selected menu policies to pass B and the primary E intervals to satisfy upper $\Delta c<0$ and lower $\Delta d>0$. Cross-dataset success requires both datasets to satisfy it. Bibtex passes both selected-policy screens but its exposure-gain interval includes zero. Mediamill has both directional intervals excluding zero, but both selected policies fail B. Thus neither dataset, nor their conjunction, meets the declared criterion. Results after failed screens remain reported; they are not promoted to screen-approved policies.
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{All seven declared candidates per dataset, with frozen $\lambda=.5$. Coverages on E are percentages; risk is FP divided by predicted-positive mass. An A-ineligible candidate has no selected threshold and is shown as unavailable, not as an evaluated reject-all policy. Selected menu pairs are Excess/Ratio (Bibtex) and Excess/Mixed (Mediamill).}
+\label{tab:v13-candidates}
+\begin{tabular}{lrrcrrr}\toprule
+Policy & B risk & B upper $G$ & B status & E $c$ & E $d$ & E risk\\\midrule
+\multicolumn{7}{l}{\textit{Bibtex}}\\
+Error & 0.40258 & +0.00794 & Fail & 72.47 & 57.87 & 0.36259 \\
+Excess & 0.38342 & -0.01385 & Pass & 80.21 & 78.10 & 0.40405 \\
+Mixed & 0.37410 & -0.02598 & Pass & 77.83 & 79.35 & 0.41028 \\
+Ratio & 0.37551 & -0.02334 & Pass & 75.80 & 80.10 & 0.41060 \\
+Descending & -- & -- & A-ineligible & -- & -- & -- \\
+GateCase & 0.40247 & +0.00424 & Fail & 86.77 & 85.10 & 0.39922 \\
+GateExposure & 0.40116 & +0.00634 & Fail & 83.08 & 84.68 & 0.39528 \\
+\midrule
+\multicolumn{7}{l}{\textit{Mediamill}}\\
+Error & 0.22627 & +0.02335 & Fail & 87.02 & 78.40 & 0.21451 \\
+Excess & 0.22397 & +0.01908 & Fail & 89.36 & 85.45 & 0.21507 \\
+Mixed & 0.22769 & +0.02756 & Fail & 86.23 & 87.86 & 0.21603 \\
+Ratio & 0.22450 & +0.02064 & Fail & 82.72 & 87.74 & 0.21621 \\
+Descending & -- & -- & A-ineligible & -- & -- & -- \\
+GateCase & -- & -- & A-ineligible & -- & -- & -- \\
+GateExposure & 0.22988 & +0.03337 & Fail & 84.42 & 89.00 & 0.22423 \\
+\bottomrule\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{3pt}
+\caption{Frozen paired E contrasts in percentage points. Primary menu rows are exposure-choice minus case-choice, with 98.75\% marginal intervals. Gate rows are gate minus the menu choice for the same utility, with 99.375\% marginal intervals. B status refers to the two policies in that row. These are two separately adjusted contrast families; neither dataset meets the joint primary criterion.}
+\label{tab:v13-contrasts}
+\begin{tabular}{lccc}\toprule
+Contrast & $\Delta c$ [interval] & $\Delta d$ [interval] & B passes\\\midrule
+Bibtex menu & $-4.41\ [-7.39,-1.55]$ & $+2.00\ [-1.84,+6.08]$ & Both \\
+Mediamill menu & $-3.14\ [-4.27,-2.02]$ & $+2.40\ [+1.31,+3.57]$ & Neither \\
+\midrule
+Bibtex gate (case) & $+6.56\ [+1.91,+11.44]$ & $+6.99\ [+0.76,+13.07]$ & Menu only \\
+Bibtex gate (exposure) & $+7.27\ [+2.56,+12.16]$ & $+4.58\ [-0.77,+9.89]$ & Menu only \\
+Mediamill gate (case) & -- & -- & A-ineligible \\
+Mediamill gate (exposure) & $-1.81\ [-3.48,-0.12]$ & $+1.15\ [-0.81,+3.09]$ & Neither \\
+\bottomrule\end{tabular}
+\end{table}
+
+Bibtex GateCase has higher E case and exposure coverage than Excess by 6.56 and 6.99 points, and lower point risk ($.39922$ versus $.40405$). Both coverage intervals in its secondary family exclude zero. Its B risk, however, is higher ($.40247$ versus $.38342$), and its signed-excess upper bound is $+.00424$ rather than Excess's $-.01385$. The corresponding B mean excesses are $-.05065$ and $-.06845$. The later advantage is visible, but this gate does not meet the declared screen. The observed policies accept different sets, so these summaries alone establish neither a gate-specific causal defect nor an explanation solely in terms of low screening power. Mediamill GateExposure also fails B; its exposure contrast with Mixed includes zero. No screened learned-gate superiority is established, and no general menu superiority follows.
+
+\subsection{Realized split risks and Descending feasibility}
+\label{sec:v13-split-diagnostics}
+The following diagnostics were computed after the frozen outcomes were known. Table~\ref{tab:v13-split-risk} places full-coverage risk across A/B/E next to each fixed cap. Bibtex B is easier than A by 3.78 risk percentage points, whereas Mediamill B is harder by .73 points. The latter is consistent with a less favorable screening split, but the label-independent hash partitions are not temporal windows: these differences do not establish distributional drift or identify the cause of screen failure. In Mediamill, all four eligible menu candidates have B point risks below $r$, yet all their upper signed-excess bounds cross zero. Failed confirmation is therefore distinct from an established violation of the cap.
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Post hoc context for B screening. Full risks use all rows in each split. The final column is the minimum A risk among \emph{every} Descending prefix satisfying the $.40$ case floor; it exceeds $r$ in both datasets, even before the additional $.95r$ design tightening.}
+\label{tab:v13-split-risk}
+\begin{tabular}{lrrrrrr}\toprule
+Dataset & Full A & Full B & Full E & B/A & $r$ & Min. Desc. A\\\midrule
+Bibtex & 0.46617 & 0.42833 & 0.43464 & 0.9188 & 0.44286 & 0.45733 \\
+Mediamill & 0.24085 & 0.24819 & 0.23939 & 1.0305 & 0.22881 & 0.23120 \\
+\bottomrule\end{tabular}
+\end{table}
+
+Descending is consequently A-ineligible, unlike the common exposure choice in the M5 audit. The exact prefix minima are $418/914=.4573304$ for Bibtex and $2416/10450=.2311962$ for Mediamill. This establishes a feasibility fact for these fitted classifiers and fixed rankings. It does not identify why false positives occur at particular predicted-positive counts. The available frozen protocol, code, and archived design memo contain no documented prospective power calculation or power-based sample-size choice for these two tests. Interval width depends on the paired policy differences and sampling assumptions as well as $n$; the sample size alone does not establish that a two-point gain was impossible to detect. These diagnostics do not change either joint-success decision.
+
+\subsection{The Mixed convention: frozen result and post hoc sensitivity}
+\label{sec:v13-lambda}
+Equation~\ref{eq:v13-mixed} defines $\lambda$ as the case-utility coefficient. Thus the historical $\lambda=.25$ convention has denominator $.25+.75w/\bar w_H$, while the frozen non-WAPE convention has $.5+.5w/\bar w_H$. We retain the latter as the primary analysis. The sensitivity reuses the fitted classifier, error head, H normalization, cap, floor, and hash order, recalibrates the changed Mixed score on A, and reapplies the declared menu choice. It uses the same B/E resampling seeds. It is post hoc and adds no confirmatory evidence to the original families. Table~\ref{tab:v13-lambda} includes both quarter-weight orientations that were calculated, avoiding selective retention of one convention.
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{3pt}
+\caption{Mixed-coefficient sensitivity. $\lambda$ weights case utility; C/D are case/exposure menu choices (Ex=Excess, Mix=Mixed, R=Ratio). The $.5$ rows reproduce frozen primary results; $.25$ and $.75$ are post hoc. Their displayed 98.75\% intervals are descriptive and outside the original confirmatory family. ``Both B'' means satisfying the original numerical screen rule, not a newly approved confirmatory screen. No row satisfies all original joint inequalities.}
+\label{tab:v13-lambda}
+\begin{tabular}{lccccc}\toprule
+Dataset & $\lambda$ & C/D & $\Delta c$ [interval] & $\Delta d$ [interval] & Both B\\\midrule
+Bibtex & 0.50 & Ex/R & $-4.41\ [-7.39,-1.55]$ & $+2.00\ [-1.84,+6.08]$ & Yes \\
+Bibtex & 0.25 & Ex/Mix & $-1.67\ [-4.05,+0.72]$ & $+2.75\ [-0.41,+6.30]$ & Yes \\
+Bibtex & 0.75 & Mix/R & $-5.60\ [-8.34,-2.98]$ & $-0.50\ [-3.81,+3.05]$ & Yes \\
+\midrule
+Mediamill & 0.50 & Ex/Mix & $-3.14\ [-4.27,-2.02]$ & $+2.40\ [+1.31,+3.57]$ & No \\
+Mediamill & 0.25 & Ex/Mix & $-5.53\ [-6.83,-4.23]$ & $+2.39\ [+1.11,+3.73]$ & No \\
+Mediamill & 0.75 & Ex/R & $-6.64\ [-8.04,-5.29]$ & $+2.29\ [+0.95,+3.67]$ & No \\
+\bottomrule\end{tabular}
+\end{table}
+
+At $\lambda=.25$, Bibtex's exposure choice changes from Ratio to Mixed, and even the case-difference interval includes zero. Mediamill retains a directional exchange but still fails B. The conclusion is therefore sensitive to the menu convention in Bibtex; the frozen result is not silently replaced with the historical coefficient. The sensitivity files use an exposure-weight parameter $1-\lambda$, so their key \texttt{0.75} corresponds to the paper's $\lambda=.25$.
+
+\subsection{Forced top-one rows and fixed-policy subgroup accounting}
+\label{sec:v13-fallback}
+Saved classifier probabilities identify rows whose original $.5$ prediction set was empty. After reconstructing these flags, we hold every fitted object, selected rule, threshold, cap, floor, and acceptance mask fixed and condition evaluation on fallback status. This is a post hoc change in the evaluation population. It does not refit a classifier without fallback, redesign its selectors, provide a causal estimate of the convention's effect, or repeat B screening on the restricted cohort. No subgroup interval or new success claim is attached.
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Frozen exposure-choice minus case-choice accounting on E. Net cases and net exposure are differences in accepted counts and predicted-positive mass. Percentage-point differences use the indicated cohort's own denominators; they must not be added across cohorts. The raw net counts and masses do add.}
+\label{tab:v13-fallback}
+\begin{tabular}{llrrrrr}\toprule
+Dataset & Cohort & $n$ & Net cases & Net exposure & $\Delta c$ & $\Delta d$\\\midrule
+Bibtex & All & 839 & -37 & +24 & -4.41 & +2.00 \\
+Bibtex & Forced top-one & 273 & -41 & -41 & -15.02 & -15.02 \\
+Bibtex & Nonfallback & 566 & +4 & +65 & +0.71 & +7.00 \\
+\midrule
+Mediamill & All & 4,306 & -135 & +268 & -3.14 & +2.40 \\
+Mediamill & Forced top-one & 137 & -61 & -61 & -44.53 & -44.53 \\
+Mediamill & Nonfallback & 4,169 & -74 & +329 & -1.78 & +2.99 \\
+\bottomrule\end{tabular}
+\end{table}
+
+In Bibtex, the 273 forced rows contribute $-41$ accepted cases, offset by $+4$ among 566 nonfallback rows; the total is $-37$. Their exposure contributions are $-41$ and $+65$, totaling $+24$ out of 1,201 predicted positives. Thus Bibtex's \emph{net case loss is confined to forced single-label rows}. The nonfallback cohort has gains in both coverages ($+.71/ +7.00$ points); the case/exposure exchange does not persist there. Within the fallback cohort $w=1$, Ratio and Excess are $\hat e$ and $\hat e-r$ and share an ordering, including their hash tie order. Different global thresholds create the accepted-count difference. Both coverages fall equally within that cohort; the entire aggregate exchange is not an exchange within forced rows. This limits Bibtex's evidence for the task without the fallback convention.
+
+Mediamill's nonfallback cohort instead retains a point exchange of $-1.78/ +2.99$ points over 4,169 examples. This is evidence that its descriptive exchange is not confined to the 137 forced rows. It neither repairs the failed B screen nor turns this subgroup into a new frozen trial. Of these two new non-WAPE datasets, Mediamill alone retains an opposite-sign point contrast after conditioning away forced predictions.
+
+\subsection{Exposure distribution and inference limits}
+\label{sec:v13-exposure}
+Table~\ref{tab:v13-exposure} records the already-evaluated E exposure distributions. We do not use them to claim that cross-dataset effect size follows exposure dispersion. Bibtex has the larger coefficient of variation and observed max/min ratio, whereas Mediamill has the larger 95th/5th percentile ratio. Selecting a dispersion summary after seeing the effects could manufacture an apparent ordering. The bounded-exposure theorem is an upper envelope under support assumptions, not a prediction of realized effect size, a lower bound on reversal, or a power calculation. Empirical quantiles are not population support bounds. The earlier proposed monotone dispersion explanation is therefore not retained.
+
+\begin{table}[H]\centering\small
+\setlength{\tabcolsep}{4pt}
+\caption{Post hoc E exposure summaries. SD uses the population divisor; CV=SD/mean. $w=1$ includes naturally single-label predictions as well as forced rows, and must not be equated with fallback. Both percentages use all E rows.}
+\label{tab:v13-exposure}
+\begin{tabular}{lrrrrrrr}\toprule
+Dataset & Mean & SD & CV & $q_{.05}/q_{.5}/q_{.95}$ & Min--max & $w=1$ (\%) & Forced (\%)\\\midrule
+Bibtex & 1.431 & 1.039 & 0.726 & 1/1/3 & 1--19 & 73.54 & 32.54 \\
+Mediamill & 2.589 & 1.166 & 0.450 & 1/2/5 & 1--9 & 12.77 & 3.18 \\
+\bottomrule\end{tabular}
+\end{table}
+
+All uncertainty summaries condition on the fitted models and A design and use a row-exchangeability approximation. Exact feature duplicates are retained under the frozen no-exclusion rule: Bibtex has duplicates within and across roles, including between A/B and B/E; Mediamill has training-role duplicates, and the distributed files do not provide grouping identifiers that would support video/shot cluster inference. Absence of exact duplicates in a role does not establish independence. The bootstrap omits classifier and split variability, and these two tests have one classifier seed each. The M5 three-seed audit does not remove those limitations.
+
+The anonymous supplement retains the frozen protocol, acquisition and source hashes, original A/B/E arrays, fitted objects, full training traces, bootstrap draws, and independent verification code. Post hoc coefficient and subgroup diagnostics are separated from the frozen evidence. Raw Mulan archives are not redistributed; their recorded source locations and hashes support reacquisition. Historical status strings in unchanged freeze or follow-up records describe the state when those records were written; the integrated definitions and conventions above specify the current manuscript. Neither the negative joint outcomes nor the unfavorable learned-gate screening results are omitted.

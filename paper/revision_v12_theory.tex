@@ -1,0 +1,107 @@
+\section{Decision-level sensitivity of estimated constraints}
+\label{app:plugin-v12}
+Appendix~\ref{app:proofs} bounds score perturbations. Moving from scores to
+decisions additionally requires stability of the feasible set. Constraint
+tightening under strict feasibility is established in constrained learning
+\citep[Proposition 4.1]{rigollet2011strict}; consistent plug-in methods also
+exist for general confusion-matrix objectives and constraints
+\citep{tavker2020plugin}. The result below specializes this sensitivity
+argument to accepted exposure and ratio risk. We do not claim a new general
+plug-in framework or use the result to certify our empirical policies.
+
+Fix a distribution and nonnegative integrable conditional moments $\ell,w$
+with $T=\E w>0$. For a gate $a$, write
+$M(a)=\E[aw]$ and $G(a)=\E[a(\ell-rw)]$, where $r\geq0$.
+Use hats for the same expectations with estimated moments. A common convex
+class $\mathcal A\subseteq\{a:0\leq a\leq1\}$ may include the true case floor.
+Suppose
+\[
+ \sup_{a\in\mathcal A}|\widehat M(a)-M(a)|\leq\epsilon_M,
+ \qquad
+ \sup_{a\in\mathcal A}|\widehat G(a)-G(a)|\leq\epsilon_G.
+\]
+Sufficient choices are $\epsilon_M=\E|\widehat w-w|$ and
+$\epsilon_G=\E|\widehat\ell-\ell|+r\E|\widehat w-w|$.
+
+\begin{proposition}[Buffered plug-in sensitivity]
+\label{prop:plugin-v12}
+Assume a maximizer $a^*$ of $M(a)$ subject to $a\in\mathcal A$, $G(a)\leq0$
+exists, and some $a_0\in\mathcal A$ satisfies $G(a_0)\leq-s<0$.
+Let $\widehat a$ be an $\eta$-optimal solution maximizing $\widehat M$
+subject to $\widehat G\leq-\tau$, where $\eta,\tau\geq0$ and
+$\epsilon_G+\tau\leq s$. Then
+\begin{align}
+ d_W(a^*)-d_W(\widehat a)
+ &\leq\frac{\epsilon_G+\tau}{s}
+       +\frac{2\epsilon_M+\eta}{T},\label{eq:plugin-cover-v12}\\
+ G(\widehat a)&\leq\epsilon_G-\tau.\label{eq:plugin-excess-v12}
+\end{align}
+If $M(\widehat a)\geq m_0>0$, then
+$[R(\widehat a)-r]_+\leq(\epsilon_G-\tau)_+/m_0$.
+In particular, $\tau=\epsilon_G$ ensures true feasibility when
+$2\epsilon_G\leq s$ and accepted exposure is positive.
+\end{proposition}
+
+\begin{proof}
+Set $t=(\epsilon_G+\tau)/s\in[0,1]$ and
+$a_t=(1-t)a^*+ta_0\in\mathcal A$. Linearity gives
+$G(a_t)\leq-ts$, hence $\widehat G(a_t)\leq-\tau$.
+Optimality up to $\eta$ and the objective error bound give
+\[
+ M(\widehat a)\geq\widehat M(\widehat a)-\epsilon_M
+ \geq\widehat M(a_t)-\eta-\epsilon_M
+ \geq M(a_t)-2\epsilon_M-\eta.
+\]
+Thus $M(a^*)-M(\widehat a)\leq
+t\{M(a^*)-M(a_0)\}+2\epsilon_M+\eta$.
+Since $a_0$ is feasible, $0\leq M(a^*)-M(a_0)\leq T$.
+Equation~\eqref{eq:plugin-excess-v12} follows from feasibility of
+$\widehat a$ for the estimated problem and the constraint error bound.
+Dividing by positive $M(\widehat a)$ proves the risk statement.
+\end{proof}
+
+The unbuffered output can be truly infeasible, so the coverage shortfall in
+Equation~\eqref{eq:plugin-cover-v12} need not be nonnegative. A case floor
+alone does not give $m_0$ if $w$ approaches zero. The stronger condition
+$w\geq u>0$, $c(a)\geq c_0>0$ gives $m_0=uc_0$.
+
+\paragraph{A finite-menu corollary and its scope.}
+For a common finite class, convexity is unnecessary if a true comparator
+$a^*$ satisfies $G(a^*)\leq-(\epsilon_G+\tau)$: it remains feasible for
+the estimated problem, and the same comparison yields
+$M(a^*)-M(\widehat a)\leq2\epsilon_M+\eta$.
+The empirical procedure uses fitted heads to propose rankings, but observed
+calibration losses to set thresholds. Its five candidates are not closed
+under mixtures. Applying either result to that procedure would require
+uniform errors for the relevant data-dependent criteria, robustness of
+candidate eligibility, and (for oracle comparison) class approximation
+control. These assumptions are not supplied by the reported bootstrap
+intervals. Changing fitted heads also changes the candidate class.
+
+\paragraph{Why head accuracy alone is insufficient.}
+Let two contexts have equal probability, $w=1$ and $\ell=r>0$ in both.
+Accept-all is truly feasible. Set $\widehat w=1$ and
+$\widehat\ell=(r+\varepsilon,r-\varepsilon^2)$ with
+$0<\varepsilon<\min(1,\sqrt r)$. The plug-in optimum accepts the second
+context and an $\varepsilon$ fraction of the first, since its constraint
+is $\varepsilon a_1\leq\varepsilon^2a_2$.
+Its coverage is $(1+\varepsilon)/2$, so its shortfall tends to $1/2$
+despite vanishing uniform head error and accepted exposure at least $1/2$.
+It meets a .35 case floor and has true risk exactly $r$. No gate has strict
+true slack. Hence head error and a positive denominator alone cannot imply
+vanishing coverage regret.
+
+For a separate denominator example, let two equally likely contexts have
+$w=(2\varepsilon,2(1-\varepsilon))$ and
+$\ell=(2(r+1)\varepsilon,2(r+2)(1-\varepsilon))$.
+Estimate only the first loss as $2r\varepsilon$. The plug-in optimum
+accepts only that context. The loss-head $L^1$ error is $\varepsilon$,
+total exposure is one, and case coverage is $1/2$, yet accepted exposure
+is $\varepsilon$ and true risk is $r+1$. This example concerns risk
+certification; it does not posit a true positive-exposure feasible gate.
+
+Neither example establishes why Descending beats Ratio in M5. Moment errors
+can cancel in the ratio, and empirical eligibility and time shift introduce
+additional effects. The new result identifies sufficient conditions and
+limits of a plug-in guarantee; the empirical estimation mechanism remains
+unidentified.

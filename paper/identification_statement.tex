@@ -1,0 +1,14 @@
+For natural demand $D$, observe sales $S=\min(D,C)$ and a censoring flag, where $C$ is an availability bound. In a mechanically censored benchmark, the retained pre-censoring target can be used for training and auditing; in natural stockouts it is generally unavailable.
+
+\begin{proposition}[Unbounded censored tails prevent a universal WAPE claim]
+\label{prop:identification}
+Fix a measurable acceptance probability based on observed information and a bounded nonnegative forecast. Assume the availability bound is nonnegative and integrable and an integrable demand completion exists. Suppose the expected acceptance weight on censored cases is positive and the compatible model class places no upper bound on their demand tail. There exist observationally indistinguishable finite-mean demand completions for which accepted WAPE approaches one. Consequently, observed censored sales alone cannot uniformly establish an acceptance constraint with $r<1$ over this model class.
+\end{proposition}
+This statement does not exclude identification under additional structural assumptions. With a valid known bound $D\in[C,U]$ on a censored case, convexity gives the conservative excess envelope
+\begin{equation}
+ |D-f|-rD \leq
+ \max\{|C-f|-rC,\ |U-f|-rU\}.
+ \label{eq:envelope}
+\end{equation}
+Inventory availability $C$ is not itself a demand upper bound $U$. A maximum observed in the development sample is also insufficient to justify a population support bound.
+

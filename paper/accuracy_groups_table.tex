@@ -1,0 +1,14 @@
+\begin{table}[htbp]\centering\small
+\caption{Calibration pooled and later category WAPE for the new predictors. The cap is 0.64013. All nine policies meet both calibration point constraints; Hobbies and Household miss the later cap.}
+\label{tab:accuracy-groups}
+\begin{tabular}{lrrrrr}\toprule
+Predictor & $\lambda$ & Cal. A/B & Foods & Hobbies & Household\\\midrule
+Group-scaled L1 & 1 & 0.6401/0.6259 & 0.5902 & 0.8468 & 0.6839 \\
+Group-scaled L1 & 0.25 & 0.6401/0.6228 & 0.5903 & 0.8321 & 0.6753 \\
+Group-scaled L1 & 0 & 0.6401/0.6215 & 0.5966 & 0.8135 & 0.6612 \\
+Residual L1 & 1 & 0.6401/0.6252 & 0.5901 & 0.8518 & 0.6855 \\
+Residual L1 & 0.25 & 0.6401/0.6232 & 0.5894 & 0.8366 & 0.6785 \\
+Residual L1 & 0 & 0.6401/0.6233 & 0.5940 & 0.8295 & 0.6699 \\
+Chronos-2 (raw) & 1 & 0.6401/0.6301 & 0.5909 & 0.8520 & 0.6870 \\
+Chronos-2 (raw) & 0.25 & 0.6401/0.6259 & 0.5898 & 0.8354 & 0.6744 \\
+Chronos-2 (raw) & 0 & 0.6401/0.6251 & 0.5967 & 0.8164 & 0.6603 \\\bottomrule\end{tabular}\end{table}

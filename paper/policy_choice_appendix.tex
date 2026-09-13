@@ -1,0 +1,42 @@
+\section{Choosing a rule by its intended coverage utility}
+\label{app:policy-choice}
+
+\subsection{Scope and fixed analysis}
+This additional analysis reuses published calibration and evaluation arrays. Its analysis specification was recorded before the new comparisons were computed, but the research program had already examined these outcomes. It is a retrospective audit, not a fresh holdout experiment. No predictor or risk head is fitted; no external retail partition is reopened. The original frozen objects, protocols, and negative results are unchanged.
+
+The fixed menu has five rankings in tie order: conditional error, row excess, mixed utility ($\lambda=.25$), pure exposure ratio, and descending predicted exposure. The last is a simple baseline. The error-regression score instantiates the regression-based uncertainty construction discussed by \citet{franc2023reject}; it is not a reproduction of SELE, SelectiveNet, or their original objectives. The menu audit uses exactly the same features and fitted heads for both utility choices.
+
+For each ranking we search every distinct calibration score, retain entire ties, and explicitly check accept-all. Empirical risk need not be monotone in a ranked prefix; the chosen threshold is the largest prefix satisfying all prescribed window constraints. Case and exposure utilities both increase along a nested family, so they cannot choose different thresholds within that family. They select between the five candidate gates by minimum calibration-window coverage. Exact ties follow the declared order. A menu with no feasible gate returns no selection and an undefined accepted risk rather than risk zero.
+
+The primary M5 cap is $r=.85\times.7530939208$, with a .35 case floor in both A/B windows. Bike retains its original cap of .85 times full calibration risk, .95 design margin, and .35 floor. The full M5 cap grid is $\{.60,.62,.64012983268,.66,.68,.70\}$; Bike uses multipliers $\{.75,.85,.95,1.05\}$. No evaluation-period winner is used to choose a threshold or rule. At accept-all, the method label ``error'' is only the declared tie breaker; it is not evidence of error-ranking superiority.
+
+\input{policy_choice_caps.tex}
+
+\subsection{Coverage differences and resampling}
+For the three M5 predictors and Bike, the two primary differences are exposure-choice minus case-choice in case and exposure coverage. We use 4,000 paired bootstrap draws (seed 20260911), resampling items for M5 and days for Bike. The eight primary endpoints use 99.375\% percentile intervals, corresponding to a Bonferroni adjustment. This is an approximate, fit-conditional analysis: it omits selection and training uncertainty and does not remove shared calendar or store dependence. The three M5 predictors share data and do not constitute independent replications.
+
+For L1, residual, and Chronos, adjusted case-difference intervals are respectively $[-43.71,-37.72]$, $[-38.08,-32.42]$, and $[-42.72,-36.67]$ points. Bike's interval is $[-16.23,-10.61]$. Table~\ref{tab:policy-choice} reports the exposure intervals. All eight exclude zero. The primary M5 selected point risks lie below the cap, but their pointwise 95\% intervals cross it. Consequently those menu comparisons do not by themselves establish risk feasibility in the population.
+
+The selected exposure rule also illustrates estimation limits. Descending predicted exposure beats the fitted pure-ratio rule in all three primary M5 comparisons, but is not chosen on Bike. Tightening the cap can change the M5 choice to the ratio. This is a result about selecting within the declared menu, not evidence that one fitted ranking is universally optimal or that every ranking inversion is caused by small denominators.
+
+\subsection{A separate-window approximate risk screen}
+\label{sec:risk-screen}
+We repeat threshold design on A alone with the fixed design cap $.95r$ and .35 case floor. For each of the 15 possible predictor--ranking pairs, the resulting threshold is then held fixed on B. Define item-level signed excess
+\[
+ G_{ij}=\sum_{t\in i}a_j(X_t)(L_t-rW_t).
+\]
+The screening value is the one-sided bootstrap upper percentile of mean $G_{ij}$ at level $1-.05/15$, using the same 4,000 item resamples for all candidates. A candidate passes if this value is nonpositive and its accepted exposure is positive. Utility selection among passing candidates uses A only. B is neither used to move a threshold nor to rank utility. The screen's sign corresponds to a ratio cap because the denominator is positive; this does not turn the bootstrap into a finite-sample distribution-free test.
+
+Ten candidates have a feasible A threshold, and all ten pass the adjusted B screen. The other five fail at threshold design: all three error-only rankings and descending exposure for L1 and Chronos. Thus this particular B screen does not reject an A-feasible candidate; the observed margin is obtained by the stricter A design, with B providing a separate check. Upper bounds on mean B signed excess for the ten candidates range from $-5.94$ to $-1.45$ per item. The software retains the no-choice branch if all candidates fail, rather than relaxing the cap or floor.
+
+\input{policy_screen_table.tex}
+
+The later-period exposure-choice gains for L1, residual, and Chronos are 8.52, 11.76, and 9.04 points; corresponding descriptive 95\% intervals are $[7.15,9.92]$, $[9.59,14.12]$, and $[7.92,10.12]$. Case differences are $-28.34$, $-36.55$, and $-26.11$ points, with intervals $[-30.06,-26.62]$, $[-38.82,-34.28]$, and $[-27.78,-24.45]$. For the residual predictor, case-selected coverage falls from 89.50\% in the original menu to 75.36\% after the stricter design. These are secondary, retrospective contrasts. Table~\ref{tab:policy-screen}'s six risk intervals are pointwise rather than a joint test family. The stricter design sacrifices coverage and establishes no groupwise or shifted-deployment guarantee. The historical external operating checks are unchanged.
+
+\subsection{Bike risk uncertainty and budget interpretation}
+An additional descriptive replay uses the original Bike bootstrap seed 20260910 and all 147 test days. At the reporting cap $r=.1328061$, row and ratio risks are .129987 and .128257; their union risk is .133984. Pointwise 95\% day-bootstrap intervals are $[.120321,.140896]$, $[.118432,.139444]$, and $[.123871,.145496]$. Bonferroni-adjusted intervals over these three quantities are $[.118419,.143363]$, $[.116489,.142088]$, and $[.121677,.147828]$. All cross the cap. The same replay exactly reproduces the original 98.75\% coverage-difference intervals.
+
+The sample-level budget identity is exact, but joint population claims require more evidence: that each policy meets the cap, their union exceeds it, and both coverage contrasts have the prescribed signs. The present risk intervals establish neither feasibility nor infeasibility for those population risks. Even a confirmed infeasible union would not establish that the original policies are Pareto-optimal: a third gate could dominate them.
+
+\subsection{Executable audit and complete outputs}
+\texttt{code/policy\_audit.py} exposes threshold design, utility selection, and sufficient-statistic functions; none accepts evaluation labels during design. \texttt{code/run\_policy\_choice.py} writes frozen choices before computing evaluation metrics. The full output retains all 22 menu settings, all 15 screen candidates, input hashes, and cluster sufficient statistics. \texttt{code/verify\_policy\_choice.py} independently checks the selected utility, old frozen-threshold compatibility, accounting identities, and bootstrap replay. \texttt{code/replay\_bike\_risk\_audit.py} reconstructs the three original risk intervals. Reproduction commands write to separate output directories.

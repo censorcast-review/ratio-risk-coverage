@@ -1,0 +1,13 @@
+\begin{table}[htbp]
+\centering\small
+\caption{Hobbies outcome substitutions, first seed. Each path optimizes its own later-window threshold, using realized labels in the excess score. Coverages are percentages; dashes mean no feasible prefix. These are samplewise diagnostics, not deployable conditional-mean oracles.}
+\label{tab:partialoracles}
+\begin{tabular}{lrrr rrr}\toprule
+&\multicolumn{3}{c}{Development}&\multicolumn{3}{c}{Item holdout}\\
+Replaced head&Rows&Demand&WAPE&Rows&Demand&WAPE\\\midrule
+Neither&0.00&0.00&--&0.00&0.00&--\\
+Error only&76.78&23.90&0.6401&76.38&21.28&0.6401\\
+Demand only&0.00&0.00&--&0.00&0.00&--\\
+Both&89.15&60.94&0.6401&86.97&54.04&0.6401\\
+\bottomrule\end{tabular}
+\end{table}

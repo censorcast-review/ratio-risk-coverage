@@ -1,0 +1,106 @@
+{
+  "schema": "hobbies-prescription-1",
+  "status": "FROZEN_BEFORE_REPLAY_AND_FITS",
+  "scope": "POST_HOC_CONSUMED_DEVELOPMENT_ONLY",
+  "seed": 20260906,
+  "cap": 0.640129832706689,
+  "row_floor": 0.35,
+  "methods": [
+    "shared_error_21",
+    "hobbies_error_21",
+    "hobbies_error_29"
+  ],
+  "new_fits": 2,
+  "fixed_score": "clip(error,0)-r*clip(frozen_demand,0)",
+  "parameters": {
+    "objective": "regression",
+    "n_estimators": 220,
+    "num_leaves": 31,
+    "learning_rate": 0.05,
+    "min_child_samples": 100,
+    "reg_lambda": 3,
+    "n_jobs": 4,
+    "random_state": 20260906,
+    "deterministic": true,
+    "force_col_wise": true,
+    "verbosity": -1
+  },
+  "categorical_columns": [
+    17,
+    18,
+    19,
+    20
+  ],
+  "training_days": [
+    1436,
+    1553
+  ],
+  "sample": "np.random.default_rng(20260906).choice(18290*118,600000,replace=False); retain rows whose series category is HOBBIES; identical indices and labels for both new fits",
+  "target": "abs(pre-mechanical-censoring truth - frozen adapted point forecast); squared-error loss",
+  "point_forecast": "first-seed observed-sales L1 plus frozen alpha=2 gamma=2 censor adapter",
+  "base_features": "exact original 21 origin-aligned risk features; inherited historical strict-censor flags retained",
+  "extra_features": [
+    "observed_positive_count_56",
+    "observed_positive_mean_56",
+    "observed_positive_cv2_56",
+    "observed_positive_recency_56",
+    "observed_positive_count_112",
+    "observed_positive_mean_112",
+    "observed_positive_cv2_112",
+    "observed_positive_recency_112"
+  ],
+  "extra_conventions": "observed history d_(origin-window+1) through d_origin only; positive mean and population CV2 are zero for no positive observations; recency=origin-last_positive_day, capped at window and equal to window if none",
+  "threshold_selection": "largest common score threshold satisfying realized WAPE<=cap and rows>=.35 in BOTH development A and B; no threshold means empty acceptance in all blocks",
+  "evaluation_blocks": {
+    "calibration_a": [
+      1555,
+      1673
+    ],
+    "calibration_b": [
+      1674,
+      1793
+    ],
+    "shadow": [
+      1800,
+      1913
+    ]
+  },
+  "retained_diagnostics": [
+    "all-row error-head MSE",
+    "positive-truth-day error-head MSE",
+    "mean error bias",
+    "A/B transferred policy metrics",
+    "development-shadow exact-score-prefix cap feasibility"
+  ],
+  "prefix_diagnostic": "each block may use its own truth only to describe the largest feasible prefix; not a deployable or independently validated threshold; all three methods retained",
+  "selection_before_shadow_metrics": true,
+  "guardian_inputs_read": false,
+  "external_inputs_read": false,
+  "certificate_issued": false,
+  "input_hashes": {
+    "design_outcomes_v0_5.npz": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "calendar.csv": "d12b5914ef03e66649adf5dd9e996e6602251c22b7a6af8f1f7e3aa12f8860f5",
+    "sell_prices.csv": "9da3ad1f8b8ccacdbdc70612191dd375ec24a4ac6625c24b75b3bc60b0bed2ef"
+  },
+  "frozen_model_hashes": {
+    "bundle": "7c44b064f02a824405754e8c17761d4aa035234ea16472d9be34efc8169bd91b",
+    "point": "fc24d1ecc568f6b78e11f309e5008b94801e5f78ba5568fd2793973959c57bb0",
+    "error": "accf0bb1d97d13dccaa3517ad94842d3cb79d32370030debc7e9402f43bcfacf",
+    "demand": "7d59e0924552d35636260bd6c8e5cb90b38dc3ab51dc9d82af7f7fd16cd38f08"
+  },
+  "source_hashes": {
+    "code/run_hobbies_intervention.py": "4559be6777fd572822d6f74be213a3b612ec6805e73a06b784335990c5a20c0f",
+    "code/run_selective_study.py": "34bbbe99e9fe553704e797dccc03676d9a9d887935b8627bb5001b0f932a7dd1",
+    "code/run_review2_objectives.py": "7ccff0daa03eafdc23b598ec22bfb6bd60691a42335030320b4f414d2d0daa60",
+    "upstream/design/censorcast_v05/features.py": "3b2bd1cc61b1d5108fa21b0cca13fc8e17fad9014d878ba8ab461f3648adee41",
+    "upstream/design/censorcast_v05/models.py": "b1fcd97fdd1603e6ef57458cb39c0cf18180c0a00aec2f4702482d6a0fe0d173"
+  },
+  "runtime": {
+    "numpy": "2.1.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "lightgbm": "4.6.0",
+    "joblib": "1.5.3",
+    "pandas": "2.2.3"
+  }
+}

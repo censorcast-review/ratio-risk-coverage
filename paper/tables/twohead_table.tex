@@ -1,0 +1,14 @@
+\begin{table}[t]
+\centering\small
+\caption{Strong fixed forecaster; three matched risk-training seeds. Values are development-shadow means $\pm$ training-seed SD (not independent-test uncertainty). Thresholds use the same two calibration blocks and row-coverage objective. Numbers in parentheses denote total boosting trees. The two-head budget-220 control uses 110 trees per head.}
+\label{tab:twohead}
+\begin{tabular}{lrrr}\toprule
+Score & Row coverage (\%) & Demand coverage (\%) & WAPE\\\midrule
+Forecast-normalized & 80.22 $\pm$ 0.27 & 86.58 $\pm$ 0.09 & 0.6216 \\
+Demand-normalized & 74.17 $\pm$ 0.85 & 89.01 $\pm$ 0.20 & 0.6260 \\
+Forecast excess & 81.47 $\pm$ 0.41 & 70.71 $\pm$ 0.59 & 0.6222 \\
+Two-head excess (440) & 86.35 $\pm$ 0.08 & 81.32 $\pm$ 0.21 & 0.6268 \\
+Two-head excess (220) & 86.61 $\pm$ 0.12 & 81.88 $\pm$ 0.29 & 0.6269 \\
+Direct excess (220) & 86.30 $\pm$ 0.16 & 80.86 $\pm$ 0.11 & 0.6245 \\
+\bottomrule\end{tabular}
+\end{table}

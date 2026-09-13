@@ -1,0 +1,58 @@
+\section{Additional seeds and an external analysis frozen before data opening}
+\label{app:additional-v12}
+\subsection{Additional paired seeds}\label{app:seeds-v12}
+Two seeds (20260913 and 20260914) were fixed after inspecting the original 20260910 results. Each repeats ten fits: two 300-tree median predictors and eight 220/660-tree squared-loss heads. Original periods, 600,000-row sampling, features, and parameters are retained. The seed changes row sampling and bin construction; both arms share the sampled rows within a seed. The item-bootstrap seed is held at 20260910 (2,000 draws) to separate its Monte Carlo variation from refitting. The cap formula remains .95 times maximum full A/B calibration risk per arm. These repetitions use the same previously evaluated M5 data; they are not three new external confirmation trials.
+
+Table~\ref{tab:seed-v12-all} reports all 24 seed/cells. Original calibration stability, tolerance, floor, exchange-interval and budget audits retain seed 20260910; they are not rerun or averaged across the additional seeds. Original per-cell point values also remain in Table~\ref{tab:matched-heads}. One saved calibration NPZ in seed 20260914 was incomplete despite matching its original completion hash. Its seven arrays were replayed from the frozen models without fitting; all four surviving arrays matched exactly and original threshold/results records were retained. The original archive and recovery protocol are supplied in the source. New evidence and independent checks are in \texttt{evidence/revision\_v12\_seeds/} and \texttt{docs/revision\_v12/}.
+
+\begin{table}[H]\centering\small
+\caption{Every paired seed/cell. Seed suffixes 10, 13, 14 mean 20260910, 20260913, 20260914. Censored and complete are abbreviated C and F. Case choice is Excess throughout. These are point effects in percentage points, not independent dataset replications.}\label{tab:seed-v12-all}
+\begin{tabular}{cllcrrr}\toprule
+Seed & Arm & Heads & Exposure & Cap & $\Delta c$ & $\Delta d$\\\midrule
+10 & C & 220/220 & Descending & 0.66471 & -39.95 & +7.05 \\
+10 & C & 660/220 & Descending & 0.66471 & -40.66 & +8.29 \\
+10 & C & 220/660 & Descending & 0.66471 & -37.94 & +8.08 \\
+10 & C & 660/660 & Descending & 0.66471 & -40.04 & +8.14 \\
+10 & F & 220/220 & Ratio & 0.63268 & -15.81 & +9.72 \\
+10 & F & 660/220 & Descending & 0.63268 & -34.52 & +11.45 \\
+10 & F & 220/660 & Descending & 0.63268 & -34.85 & +9.88 \\
+10 & F & 660/660 & Descending & 0.63268 & -34.98 & +10.71 \\
+13 & C & 220/220 & Descending & 0.66469 & -38.71 & +8.31 \\
+13 & C & 660/220 & Descending & 0.66469 & -40.47 & +8.26 \\
+13 & C & 220/660 & Descending & 0.66469 & -35.97 & +9.80 \\
+13 & C & 660/660 & Descending & 0.66469 & -39.14 & +8.49 \\
+13 & F & 220/220 & Ratio & 0.63357 & -18.28 & +8.42 \\
+13 & F & 660/220 & Descending & 0.63357 & -35.86 & +9.74 \\
+13 & F & 220/660 & Ratio & 0.63357 & -23.03 & +7.78 \\
+13 & F & 660/660 & Descending & 0.63357 & -36.54 & +8.14 \\
+14 & C & 220/220 & Descending & 0.66517 & -37.62 & +9.84 \\
+14 & C & 660/220 & Descending & 0.66517 & -38.25 & +11.19 \\
+14 & C & 220/660 & Descending & 0.66517 & -35.71 & +10.21 \\
+14 & C & 660/660 & Descending & 0.66517 & -37.75 & +10.38 \\
+14 & F & 220/220 & Descending & 0.63328 & -34.74 & +10.88 \\
+14 & F & 660/220 & Descending & 0.63328 & -34.01 & +12.05 \\
+14 & F & 220/660 & Descending & 0.63328 & -34.71 & +10.18 \\
+14 & F & 660/660 & Descending & 0.63328 & -34.56 & +10.78 \\
+\bottomrule\end{tabular}\end{table}
+
+\subsection{External protocol and complete candidate report}\label{app:external-v12}
+We thank the James M. Kilts Center for Marketing at the University of Chicago Booth School of Business for the Dominick's data. This academic analysis uses the Oatmeal movement CSV, selected for public access and bounded scope before raw outcomes were opened. Favorita was considered but not downloaded because authentication was unavailable. No outcome-based choice between datasets or categories was made. No earlier use of Dominick's was found in the study records. The protocol is a local, time-stamped pre-opening record, not a public-registry preregistration.
+
+Weeks 53--208 fit the point predictor; 209--260 fit heads; 261--312 are A; 313--364 are B; 365--400 are final evaluation. Valid records have the provider's OK flag equal to one and finite nonnegative MOVE. Missing records are not imputed as sales. The cohort requires at least 52 valid point-training records and positive point-training sales, with no future-window selection. It contains 4,839 store--UPC series, 66 products and 86 stores. Point/head/A/B/evaluation record counts are 511,980/186,347/153,255/139,881/85,039.
+
+Forecasts are rolling one week ahead. Features are store/UPC identifiers, time, seasonal sine/cosine, sales lags 1/2/4/13/26/52, and past-only rolling means, standard deviations, maxima and missing fractions over 4/13/26 weeks. The 300-tree median predictor and two 220-tree squared-loss heads use seed 20260912 and the paired study's learning rate, leaf count and minimum leaf size. No tuning or early stopping is performed. A determines $r=.95R_{\rm all,A}=.91739424$ and thresholds at $.95r=.87152453$, floor .40. Each utility selects on A; B only screens the fixed choices, without fallback or reselection.
+
+Circular moving blocks of four calendar weeks retain all UPC/store records in each week; B and evaluation use 20,000 draws each, with separate fixed seeds. Five-candidate upper risk summaries use tail .05/5. The declared joint success criterion requires both A-selected policies to pass B and the final 95\% paired intervals to have upper $\Delta c<0$ and lower $\Delta d>0$. It is not met: $\Delta c=-4.6343$ ($[-6.1496,-3.4492]$) and $\Delta d=2.5299$ ($[-.6887,5.8453]$). Positive point direction and B passage provide partial evidence, but not the declared interval confirmation. No retuning followed.
+
+An overstrict implementation assertion initially stopped evaluation because weeks 370, 371 and 400 had no records. The completion retains all 36 calendar weeks with zero contribution in empty weeks, using the same frozen policies, models, arrays, bootstrap settings and success criterion. It performs no new fits or selection and reproduces the existing B results exactly. Original failure and amendment records are preserved. This does not change the observational meaning of missing weeks or give a population guarantee.
+
+\begin{table}[H]\centering\small
+\caption{All five external candidates. Coverages are percentages. A risk design uses .871525; B compares its adjusted upper risk summary with .917394. Descending is infeasible on A; Error is feasible on A but fails B. Selected Excess and Ratio both pass B.}\label{tab:external-v12-all}
+\begin{tabular}{lrrcrrr}\toprule
+Rule & A $c$ & A $d$ & B risk upper & E $c$ & E $d$ & E risk\\\midrule
+Excess & 94.57 & 77.95 & 0.90950 & 96.29 & 89.68 & 0.82991 \\
+Ratio & 85.27 & 86.15 & 0.87573 & 91.65 & 92.21 & 0.82070 \\
+Descending & 0.00 & 0.00 & -- & 0.00 & 0.00 & -- \\
+Mixed & 93.29 & 85.06 & 0.87381 & 94.52 & 91.81 & 0.81972 \\
+Error & 93.66 & 71.53 & 0.94596 & 95.08 & 82.08 & 0.83644 \\
+\bottomrule\end{tabular}\end{table}

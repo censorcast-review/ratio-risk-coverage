@@ -1,0 +1,84 @@
+{
+  "utc": "2026-09-12T06:30:53.955927+00:00",
+  "scope": "retrospective audit of already-consumed development windows; conditional on one existing fit",
+  "arm": "complete recorded sales",
+  "head_pairs": [
+    [
+      220,
+      220
+    ],
+    [
+      660,
+      220
+    ],
+    [
+      220,
+      660
+    ],
+    [
+      660,
+      660
+    ]
+  ],
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "candidate_family_size": 20,
+  "report_cap": 0.6326834234117924,
+  "report_cap_source": "matched_censoring/complete/FROZEN.json, relative factor 0.95",
+  "score_cap": 0.6326834234117924,
+  "design_cap": 0.6010492522412028,
+  "design_factor": 0.95,
+  "row_floor_A": 0.35,
+  "T": 1.2685216666666668,
+  "windows": {
+    "A": [
+      1611,
+      1645
+    ],
+    "B": [
+      1646,
+      1673
+    ],
+    "later_already_consumed": [
+      1800,
+      1913
+    ]
+  },
+  "threshold_design": "A only; largest eligible complete-score-tie threshold at design cap; positive accepted exposure; no B threshold retuning",
+  "screen": "B pooled signed-excess item-bootstrap upper quantile <= 0 and positive B accepted exposure",
+  "bootstrap": {
+    "unit": "item (stores and days clustered together)",
+    "draws": 4000,
+    "seed": 20260912,
+    "screen_one_sided_alpha": 0.0025,
+    "screen_family_size": 20,
+    "later_pointwise_risk_ci": [
+      0.025,
+      0.975
+    ],
+    "later_selected_eight_upper_quantile": 0.99375,
+    "later_twenty_candidate_upper_quantile": 0.9975,
+    "coverage_and_contrast_ci": [
+      0.025,
+      0.975
+    ],
+    "quantile_method": "linear"
+  },
+  "selection": "among B-screen passers, maximize A case/exposure coverage separately, declared METHODS order for exact ties; no-choice if none pass",
+  "baseline": "each cell's existing unscreened relative-0.95 primary case/exposure choices, frozen without refit",
+  "limitations": [
+    "approximate bootstrap, not population risk guarantee",
+    "B shares items with A and prior fits; temporal split is not independent item sampling",
+    "four shared-head cells are sensitivity conditions, not independent replications",
+    "one fit seed 20260910; bootstrap does not include fit or policy-selection uncertainty",
+    "later outcomes have previously been consumed; no prospective claim",
+    "no cap tuning after any outcomes"
+  ],
+  "fit_calls": 0,
+  "new_external_openings": 0
+}

@@ -1,0 +1,128 @@
+% Replaces review4_theory_proofs.tex; Appendix A.1 uses generic ell,w.
+\subsection{Sharp reversal for nonnegative ratio risks}
+\paragraph{Proof of Proposition~\ref{prop:lowdemand}.}
+Since $\ell=\rho w$ on $U$, its error-to-exposure ratio is $\rho$
+and its excess mass is $(\rho-r)M_U$. The combined excess is
+$-B+(\rho-r)M_U$, proving the first assertion and the coverage increments.
+
+For sharpness, take $k,p,q>0$ with $k+p+q=1$, $k>c_0$, $q>p$,
+and $0<\varepsilon<p/q$. Set the conditional moments to
+\[
+\begin{array}{c|ccc}
+ &K&U&V\\\hline
+ \Pr(X)&k&q&p\\
+ w&\dfrac{q(\rho-r)\varepsilon}{rk}&\varepsilon&1\\
+ \ell&0&\rho\varepsilon&r+\dfrac qp(\rho-r)\varepsilon
+\end{array}
+\]
+They can be realized simply by deterministic $(L,W)=(\ell,w)$.
+Their excesses are
+\[
+ m_K=-\frac{q(\rho-r)\varepsilon}{k},\quad
+ m_U=(\rho-r)\varepsilon,\quad
+ m_V=\frac qp(\rho-r)\varepsilon.
+\]
+Every optimum accepts $K$, since doing so increases either utility
+and relaxes the constraint. Its budget is $B=q(\rho-r)\varepsilon$.
+Once $K$ is accepted, feasibility reduces to $a_U+a_V\leq1$.
+Row utility is maximized uniquely at $(a_U,a_V)=(1,0)$ since $q>p$;
+exposure utility is maximized uniquely at $(0,1)$ since $q\varepsilon<p$.
+These arguments optimize over all fractional acceptance rules.
+Both policies have ratio risk $r$ and row coverage above $c_0$.
+With $T=p+q\rho\varepsilon/r$,
+\[
+ \Delta c=q-p,\qquad
+ d_W(a_R)=\frac{q\rho\varepsilon}{rp+q\rho\varepsilon},\qquad
+ \Delta d_W=\frac{r(p-q\varepsilon)}{rp+q\rho\varepsilon}.
+\]
+Take $k>c_0$ sufficiently near $c_0$ and then $p>0$ sufficiently
+small that $q-p=1-k-2p>1-c_0-\eta$; for these masses,
+$\varepsilon\downarrow0$ gives $\Delta d_W\to1$.
+The opposite inequalities follow from $c(a_R)\leq1$,
+$c(a_W)\geq c_0$, and $0\leq d_W\leq1$.
+
+For $0<r<1$, choose $\rho=1$ and scale all moments by
+$h=1/\max(1,w_K)$, which leaves risks, both coverages, and both
+optimizers unchanged. Then $0\leq\ell\leq w\leq1$.
+At each context, put probabilities $\ell,w-\ell,1-w$ on
+$(L,W)=(1,1),(0,1),(0,0)$. This realizes the same conditional moments
+with nested binary events, proving bounded-loss sharpness.
+For the deterministic WAPE specialization before scaling, take
+$Y=(w_K,\varepsilon,1)$ and
+$f=(w_K,0,(1-r)(1-q\varepsilon/p))$. These nonnegative forecasts
+realize precisely the $\rho=1$ moments. \hfill$\square$
+
+\paragraph{Scope of the realizability condition.}
+The displayed moment family is a sufficient condition for a fixed
+loss/exposure model class to inherit the sharp bounds. In this
+three-context family the strict inequalities $q>p$ and
+$q\varepsilon<p$ are also necessary for these two distinct, unique
+optima. They are not necessary conditions for reversal in arbitrary
+larger classes. Ratio form, nonnegativity, and integrability alone
+do not make every specified metric class rich enough: constant
+$w$ makes exposure and row utility proportional. For a precision-like
+error ratio, $L=\ind\{\widehat Y=1,Y=0\}$ and
+$W=\ind\{\widehat Y=1\}$; for a recall-like miss ratio,
+$L=\ind\{Y=1,\widehat Y=0\}$ and $W=\ind\{Y=1\}$.
+Both have $L\leq W$, but realization requires acceptance to be
+chosen using information for which the joint event probabilities
+can take the three specified values. A deterministic prediction
+included in $X$ restricts these moments. Recall here is conditional
+on accepted cases; a metric counting rejected positives in its
+fixed denominator is a different constraint.
+
+\paragraph{A margin-dependent bound.}
+For alternatives $K\cup U$ and $K\cup V$, suppose $\ell=\rho w$
+on $U$ and $U$ exhausts the common slack:
+$B=(\rho-r)M_U>0$. If $K\cup V$ satisfies the cap, $M_V>0$,
+and $R(\ind_V)-r\geq\delta>0$, then
+\[
+ d_W(\ind_{K\cup V})-d_W(\ind_{K\cup U})
+ \leq\frac{M_U}{T}\left(\frac{\rho-r}{\delta}-1\right).
+\]
+Indeed, $\delta M_V\leq\E[\ind_Vm_r]\leq B$.
+If both alternatives exhaust the same budget, the exact identity is
+\[
+ \Delta d_W=\frac{M_U}{T}
+ \frac{\rho-R(\ind_V)}{R(\ind_V)-r}.
+\]
+The construction has $M_U/T\to0$ but $R(\ind_V)-r\to0$ as well;
+this is why exposure share alone gives no vanishing bound.
+For WAPE near-zero forecasts satisfy
+$|\E[\ind_U e]-M_U|\leq\E[\ind_Uf]$, and hence
+$|R(\ind_U)-1|\leq\E[\ind_Uf]/M_U$.
+
+\paragraph{Finite perturbations of estimated rankings.}
+Let $\widehat\ell=\ell+\delta_\ell$,
+$\widehat w=w+\delta_w$, where $w>0$ and
+$|\delta_w|\leq\beta w$ for some $0\leq\beta<1$. Direct subtraction gives
+\[
+ \left|\frac{\widehat\ell}{\widehat w}-\frac\ell w\right|
+ =\frac{|w\delta_\ell-\ell\delta_w|}{w|w+\delta_w|}
+ \leq\frac{|\delta_\ell|+(\ell/w)|\delta_w|}{(1-\beta)w}.
+\]
+In contrast, $|\widehat m_r-m_r|\leq|\delta_\ell|+r|\delta_w|$.
+The local derivatives with respect to $w$ are $-\ell/w^2$ and $-r$;
+the ratio's sensitivity with respect to $\ell$ is $1/w$.
+These are sensitivity statements, not a proof that denominator
+noise alone causes the observed empirical ordering.
+For fixed $T>0$, write $b=(1-\lambda)/T$ and
+$s_\lambda=(\ell-rw)/(\lambda+bw)$. When $0<\lambda\leq1$ and
+$w,\widehat w\geq0$, the denominator is at least $\lambda$, and
+\[
+ \left|\widehat s_\lambda-s_\lambda\right|
+ \leq\frac{|\delta_\ell|+r|\delta_w|}{\lambda}
+ +\frac{|m_r|b|\delta_w|}{\lambda^2}.
+\]
+Its derivatives satisfy
+\[
+ \frac{\partial s_\lambda}{\partial w}
+ =-\frac{r\lambda+b\ell}{(\lambda+bw)^2},\qquad
+ \frac{\partial s_\lambda}{\partial\ell}
+ =\frac{1}{\lambda+bw}\leq\frac1\lambda.
+\]
+Thus positive row utility removes the small-denominator singularity
+for fixed bounded moments. It does not remove fitting error,
+calibration error, or distribution shift. A floor $\max(\widehat w,c)$
+likewise bounds denominator sensitivity, while changing the
+unregularized population ranking.

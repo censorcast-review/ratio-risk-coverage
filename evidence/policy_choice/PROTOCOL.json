@@ -1,0 +1,72 @@
+{
+  "created_utc": "2026-09-09T08:37:47.750481+00:00",
+  "scope": "Additional retrospective audit. All calibration and evaluation outcomes were previously analyzed. This protocol locks the present analysis but creates no new independent confirmation. No model fit or external retail reopening.",
+  "parent_commit": "dd8ed9a5230d39148731b5a684b7bad0c6b58ff5",
+  "candidate_order": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "predictors": [
+    "group_l1",
+    "learned_l1",
+    "chronos2_univariate_raw"
+  ],
+  "m5_caps": [
+    0.6,
+    0.62,
+    0.64012983268,
+    0.66,
+    0.68,
+    0.7
+  ],
+  "m5_primary_cap": 0.64012983268,
+  "bike_factors": [
+    0.75,
+    0.85,
+    0.95,
+    1.05
+  ],
+  "bike_primary_factor": 0.85,
+  "row_floor": 0.35,
+  "choice": {
+    "thresholds": "largest whole-tie feasible threshold; explicit accept-all; original common cap constraints in both M5 calibration windows, original .95*cap margin on Bike calibration",
+    "row_choice": "maximize minimum calibration-window case coverage",
+    "exposure_choice": "maximize minimum calibration-window exposure coverage",
+    "ties": "candidate_order, no test information",
+    "empty": "no selected policy; reject all; undefined accepted risk"
+  },
+  "separate_screen": {
+    "scope": "M5 primary cap only, approximate item bootstrap; random item resampling does not account for shared store/calendar shocks",
+    "threshold_design": "calibration A only at 0.95*primary_cap; row floor .35; common finite family, all 3 predictors times 5 rankings",
+    "risk_screen": "calibration B one-sided bootstrap upper bound of signed excess per item <=0, Bonferroni .05/15 across all 15 fixed candidates; positive realized accepted exposure",
+    "selection": "among screen-passing candidates for each predictor, maximize case or exposure coverage on calibration A",
+    "test": "Later outcomes only evaluate frozen selections; no retuning if failure",
+    "bootstrap_draws": 4000,
+    "bootstrap_seed": 20260911
+  },
+  "inference": {
+    "unit_m5": "item, all stores and days retained",
+    "unit_bike": "day",
+    "draws": 4000,
+    "seed": 20260911,
+    "main_contrasts": "exposure-choice minus case-choice at existing primary cap for 3 M5 backbones and Bike; 8 coverage endpoints total",
+    "coverage_intervals": "95% descriptive and Bonferroni 99.375% for 8 primary coverage endpoints; conditional on fitted models and chosen policies; not selection uncertainty",
+    "risk_intervals": "pointwise 95% descriptive test risk intervals; do not infer population feasibility from point estimates",
+    "sensitivity": "all declared caps; no post-hoc winner promotion"
+  },
+  "planned_outputs": [
+    "all calibration metrics, frozen choices and hashes",
+    "all test metrics including no-choice conditions",
+    "paired coverage and test-risk intervals",
+    "retrospective split calibration screens including all rejected candidates",
+    "reusable CLI and sufficient statistics",
+    "existing Bike row/demand/union risk-interval audit"
+  ],
+  "input_sha256": {
+    "evidence/accuracy_selection/FROZEN_SELECTORS.json": "20d7111baa8099ffaadd35148714b21f94761a14400b438b2c4fa545db6868d4",
+    "evidence/nonretail/bike/FROZEN.json": "f12685116e68d209f94da4dce00e441cef0e673739b56357b0fca2857d8dbfad"
+  }
+}

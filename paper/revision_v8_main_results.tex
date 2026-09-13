@@ -1,0 +1,26 @@
+\subsection{Near-ties in calibration utility}
+\label{sec:head-intervention}\label{sec:selection-stability}\label{sec:tolerance}
+At complete-sales 220/220, Ratio and Descending have minimum calibration exposure coverages 91.02768\% and 91.00063\%, only 0.02704 points apart; their case coverages differ by 21.83 points (Figure~\ref{fig:near-tie}). Repeating all threshold searches and both menu choices on 200 item-cluster resamples selects Ratio/Descending for exposure in 51.5\%/48.5\% of draws. Fits, scores, cap and $T$ remain fixed. Changing either head to 660 untuned trees also switches the original choice to Descending. Those heads do not uniformly improve MSE; this is specification sensitivity, not a test of improved moment estimation (Appendices~\ref{app:matched} and \ref{app:v7-stability}). Neither intervention alone identifies the cause of the other.
+
+A secondary utility makes the intended treatment of near-ties explicit. Write $\bar c_j=\min_b\widehat c_b(a_j)$ and $\bar d_j=\min_b\widehat d_b(a_j)$ for eligible candidates, and set
+\begin{equation}
+ \mathcal J_\varepsilon=\{j:\bar d_j\geq\max_k\bar d_k-\varepsilon\},
+ \qquad j_{D,\varepsilon}=\mathop{\rm lexargmax}_{j\in\mathcal J_\varepsilon}
+ (\bar c_j,\bar d_j).
+ \label{eq:tolerance}
+\end{equation}
+Exact remaining ties use the original fixed order; case selection is unchanged. The rule maximizes case coverage within a declared exposure concession. Positive $\varepsilon$ changes the objective; an exact secondary tie-break ($\varepsilon=0$) does not resolve a nonzero margin. We record an illustrative .5-point allowance and the full grid $\{0,.1,.25,.5,1\}$ points before this additional retrospective computation. The allowance is a utility preference, not a noise estimate or confidence band.
+
+At .5 points, all four complete-sales cells select Ratio and all censored cells retain Descending. On the same 200 resamples, the complete reference selects Ratio/Mixed/Descending in 97/1.5/1.5\%; Bike instead selects Ratio/Mixed in 86/14\%, compared with 96/4\% originally. Thus a band need not favor the same rule in every setting. The three changed complete-sales cells gain 13.62--24.11 evaluation case points at a .251--.621 exposure-point cost versus their original exposure choices. One cost exceeds .5: the bound concerns calibration utility only. Full grid outcomes, including the non-monotone frequency at a 1-point allowance, appear in Appendix~\ref{app:v8-tolerance}.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\linewidth]{revision_v8_neartie.pdf}
+\caption{Complete-sales 220/220 calibration candidates; Error is infeasible. Minimum case and exposure coverage are taken separately over A/B. The right panel magnifies the exposure axis. Shading marks the declared .5-point utility allowance, clipped by the zoom; it is not a confidence interval. Ratio and Descending are close in exposure but far apart in cases.}\label{fig:near-tie}
+\end{figure}
+
+\subsection{Separate-window risk evidence and the case floor}
+\label{sec:complete-screen}
+At fixed complete-sales reporting cap $r=.632683$, thresholds are designed on A at $.95r=.601049$ and checked on B using signed-excess item-bootstrap upper quantiles. Choices maximize A utility among B passers and are frozen before rereading the consumed Later window. At floor .35, all 16 nonempty candidates pass the original 20-candidate screen, and all four head cells select Excess/Descending. Later adjusted risk upper summaries are below the cap, at substantial coverage cost (Appendix~\ref{app:v7-screen}). B removes no additional candidate; the result concerns the combined stricter design and audit.
+
+Descending's maximum A case coverage is only 35.05--35.09\%. Our declared floor grid $\{.35,.40,.45\}$ therefore changes eligibility: at .40 and .45, Descending is infeasible and all four cells select Excess/Ratio (Table~\ref{tab:v8-floor-main}). Relative to floor .35, the exposure choice gains 9.24--19.02 Later case points and loses 1.17--1.57 exposure points. The exchange persists with a smaller case sacrifice. Every nonempty candidate passes even under the full 60-condition adjustment; the largest selected Later upper summary is .62803, below $r$. These are approximate, fit-conditional summaries with coarse extreme tails, not population guarantees. At 220/660, Ratio itself has only 45.057\% A case coverage, so the declared grid does not establish robustness to larger floors. Appendix~\ref{app:v8-floor} gives all conditions.
+\input{revision_v8_floor_main_table.tex}

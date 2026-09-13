@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\caption{Pooled contract-excess threshold, first risk seed. Adjusted bounds use bootstrap quantiles at 0.05/8 and 1--0.05/8 across coverage/WAPE for the whole population and three categories. They are descriptive, not a calibrated familywise guarantee.}
+\label{tab:groups}
+\begin{tabular}{llrrrr}
+\toprule
+Forecaster & Group & Coverage & WAPE & Cov. lower & WAPE upper\\
+\midrule
+Earlier & All & 0.6792 & 0.6177 & 0.6668 & 0.6454\\
+Earlier & Foods & 0.6086 & 0.5583 & 0.5923 & 0.5878\\
+Earlier & Hobbies & 0.6736 & 0.9674 & 0.6382 & 1.0767\\
+Earlier & Household & 0.7835 & 0.7062 & 0.7674 & 0.7547\\
+L1 + adapter & All & 0.8619 & 0.6244 & 0.8532 & 0.6505\\
+L1 + adapter & Foods & 0.8135 & 0.5832 & 0.8032 & 0.6141\\
+L1 + adapter & Hobbies & 0.8673 & 0.8442 & 0.8377 & 0.8951\\
+L1 + adapter & Household & 0.9283 & 0.6788 & 0.9210 & 0.7172\\
+\bottomrule
+\end{tabular}
+\end{table}

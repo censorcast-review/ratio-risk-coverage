@@ -1,0 +1,114 @@
+{
+  "version": "B-v12-1",
+  "utc": "2026-09-12T09:29:36.699757+00:00",
+  "dataset": "Dominicks Oatmeal movement CSV",
+  "url": "https://www.chicagobooth.edu/-/media/enterprise/centers/kilts/datasets/dominicks-dataset/movement_csv-files/woat.zip",
+  "license": "Academic research only; acknowledge Kilts Center, Chicago Booth",
+  "selection_reason": "Public academic access without unavailable Kaggle credentials; one packaged-staple category limits computation. No raw outcomes inspected before choice.",
+  "prior_use": "No use found in the current project or retrieved prior context; not a universal claim about every coauthor.",
+  "status": "Locally frozen before first data download; not a public registry preregistration",
+  "windows": {
+    "point": [
+      53,
+      208
+    ],
+    "head": [
+      209,
+      260
+    ],
+    "A": [
+      261,
+      312
+    ],
+    "B": [
+      313,
+      364
+    ],
+    "E": [
+      365,
+      400
+    ]
+  },
+  "forecast": "Rolling one-week-ahead; past observed sales only; model fits remain fixed",
+  "target": "Recorded unit sales MOVE, no artificial censoring; not latent demand",
+  "rows": "OK=1, finite nonnegative MOVE; no missing-row zero imputation; duplicate store/UPC/week aborts",
+  "cohort": "Store-UPC pairs with >=52 valid point-window records and positive point-window sales; decided without A/B/E",
+  "features": "Store/UPC categorical codes, week, sin/cos52, lags1/2/4/13/26/52, rolling4/13/26 mean/std/max/missing; all sales strictly earlier than target week",
+  "seed": 20260912,
+  "point_params": {
+    "objective": "quantile",
+    "alpha": 0.5,
+    "n_estimators": 300,
+    "num_leaves": 31,
+    "learning_rate": 0.05,
+    "min_child_samples": 50,
+    "n_jobs": 4,
+    "random_state": 20260912,
+    "verbosity": -1,
+    "deterministic": true,
+    "force_col_wise": true
+  },
+  "head_params": {
+    "objective": "regression",
+    "alpha": 0.5,
+    "n_estimators": 220,
+    "num_leaves": 31,
+    "learning_rate": 0.05,
+    "min_child_samples": 50,
+    "n_jobs": 4,
+    "random_state": 20260912,
+    "verbosity": -1,
+    "deterministic": true,
+    "force_col_wise": true
+  },
+  "samples": "All eligible rows up to600000, fixed seeded nonreplacement draw if needed",
+  "menu": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "head_pairs": [
+    [
+      220,
+      220
+    ]
+  ],
+  "floor": 0.4,
+  "selection": "Eq6 on A; complete ties; stable declared method order; no fallback after B",
+  "cap": "r=.95*full-coverage A risk; design cap=.95*r; scores use r. Never inspect B to set r.",
+  "bootstrap": {
+    "unit": "Circular moving blocks of4 calendar weeks, all stores and UPCs together",
+    "B_draws": 20000,
+    "E_draws": 20000,
+    "B_seed": 2026091201,
+    "E_seed": 2026091202,
+    "B_upper_tail": 0.01,
+    "quantile_method": "linear",
+    "E_interval": [
+      0.025,
+      0.975
+    ]
+  },
+  "screen": "Five A-frozen candidates; B upper quantile of pooled signed excess L-rW <=0 and positive accepted exposure; report all candidates",
+  "primary_success": "Both A-selected policies pass B and E paired95% interval upper(dc)<0 and lower(dd)>0",
+  "secondary": "Point-sign exchange dc<0,dd>0; per-candidate E risk/exposure/case; E risk upper bounds descriptive",
+  "limitations": [
+    "Historical data, new to this analysis workflow",
+    "One external fit seed/category",
+    "Block bootstrap is approximate, conditional on cohort/fits; no population-risk guarantee",
+    "No evidence of uncensored latent demand",
+    "A-only cap differs from the retrospective joint-A/B design"
+  ],
+  "no_retuning": "No alternate category, seed, floor, cap, model, or success criterion after opening; all failures retained",
+  "code_sha256": {
+    "code/run_external_v12.py": "a9ab7b21aea43410f6c339cd0f8f0d35e9f614eba2e41b5673053416118b6cf4",
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f"
+  },
+  "runtime": {
+    "lightgbm": "4.7.0",
+    "numpy": "2.3.5",
+    "pandas": "2.2.3"
+  }
+}

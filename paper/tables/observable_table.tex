@@ -1,0 +1,21 @@
+\begin{table}[t]
+\centering\small
+\caption{New likelihood controls: three-fit development-shadow means with the fixed observed-sales L1 forecast and excess score. Thresholds use model-implied moments, not hidden targets. Upper block uses the supplied strict flag in historical features; lower block uses sales and capacity alone in both histories and likelihoods. ``--'' means no accepted mass. The truth-trained row is a separate diagnostic reference.}
+\label{tab:observable}
+\begin{tabular}{lrrrr}
+\toprule
+Likelihood / observation rule & Row (\%) & Demand (\%) & WAPE & Hobbies WAPE\\
+\midrule
+Observed-sales Poisson & 100.00 & 100.00 & 0.6790 & 0.8572\\
+Uncensored-only Poisson & 74.04 & 57.65 & 0.6331 & 0.8924\\
+Censored Poisson & 100.00 & 100.00 & 0.6790 & 0.8572\\
+Censored NB, $\kappa=0.5$ & 0.00 & 0.00 & -- & --\\
+Censored NB, $\kappa=2$ & 45.21 & 51.62 & 0.5353 & 0.7955\\
+Censored NB, $\kappa=10$ & 100.00 & 100.00 & 0.6790 & 0.8572\\
+Truth-trained Poisson reference & 100.00 & 99.97 & 0.6789 & 0.8572\\
+\midrule
+Capacity-hit Poisson & 100.00 & 100.00 & 0.6790 & 0.8572\\
+Capacity-hit NB, $\kappa=0.5$ & 0.00 & 0.00 & -- & --\\
+Capacity-hit NB, $\kappa=2$ & 48.17 & 54.80 & 0.5461 & 0.8018\\
+Capacity-hit NB, $\kappa=10$ & 100.00 & 100.00 & 0.6790 & 0.8572\\
+\bottomrule\end{tabular}\end{table}

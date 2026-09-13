@@ -1,0 +1,47 @@
+\section{Accuracy improvement with newly fitted acceptance policies}
+\label{app:accuracy}
+\subsection{A distinct retrospective protocol}
+The additional experiment uses only the 1,829 development items and origin-valid observations; neither historical holdout is accessed. All dates have been consumed in prior research. A protocol records the predictor identities, chronological blocks, head specification, utility grid, cap, floor, and bootstrap before the additional head fits. This order makes the computation auditable; it does not erase previous knowledge of evaluation performance.
+
+The group-scaled predictor is the first hierarchy-feature XGBoost L1 fit from the forecasting experiments, trained on observed sales with 33 origin-valid features and seven cross-store item summaries. A separately learned observable capacity-hit probability $q$ is available. The residual predictor is
+\[
+ f_{\rm res}(X)=\max\{f_0(X)+g(X,f_0(X),q(X)),0\},
+\]
+where $g$ is L1 gradient boosting trained on retained-target residuals. Days 1314--1373 fit candidate corrections and 1374--1433 select depth in $\{2,4\}$ and tree count in $\{50,150,300\}$; parent scaling is a fallback. Learning rate is 0.03 and minimum leaf sample size is 50. The selected depth-4, 300-tree correction is refitted on their union (up to 400,000 sampled rows). No accuracy parameter is retuned during the new selector comparison. The correction is conventional residual learning, not a proposed architecture.
+
+Chronos-2 uses the archived univariate, nonnegative median forecasts, context up to 2,048, horizon seven, and no cross-series learning. Weight revision, weight hashes, and prediction receipts accompany the data. Raw backbone outputs are used; the older risk-bin recalibration, which was fitted on an overlapping block, is deliberately not used in this comparison. Foundation pretraining and task-specific supervised forecasting have different information histories; the within-predictor utility contrasts are the target.
+
+The new demand head sees 40 history/hierarchy features and $q$. Each predictor-specific error head also sees that predictor's forecast. Heads use squared loss, 220 trees, 31 leaves, learning rate 0.05, minimum leaf size 50, deterministic four-thread fitting, and seed 20260908. The same 600,000 sampled training rows supply $Y$ to the demand head and $|Y-f|$ to each error head. Both outputs are clipped to nonnegative values. Thus the acceptance experiment intentionally uses benchmark truth labels; it is not an observed-sales-only solution for naturally hidden demand.
+
+The earliest calibration origin is 1610, after all head-training targets through 1610 have been observed. The two blocks contain 35 and 28 target days; evaluation contains 114 target days with origins at least 1799. The training sample's mean demand estimates $T$. For each $\lambda\in\{1,0.25,0\}$, all distinct finite score thresholds are searched, whole ties are retained, and the largest threshold meeting pooled WAPE and row-floor constraints in both blocks is fixed. No test outcome selects a threshold or utility weight. An infeasible search would return full abstention; all nine searches are feasible. The cap uses the displayed reference $0.85\times0.7530939208$, differing from the historical full-precision cap by less than $3\times10^{-11}$.
+
+\input{accuracy_ci_table.tex}
+\input{accuracy_groups_table.tex}
+\input{accuracy_budget_table.tex}
+The paired bootstrap resamples 1,829 item clusters, retaining all stores and dates, with 4,000 draws at seed 20260908. These are marginal descriptive percentile intervals conditional on the predictors, fitted heads, chosen policies, and adaptive research history. They do not include model-fitting uncertainty or shared calendar/store shocks. Item sufficient statistics reproduce all intervals; saved forecast and head arrays reproduce masks and budget sums.
+
+\subsection{Coverage results for the three archived predictors}
+\label{sec:accuracy}
+\input{accuracy_section.tex}
+
+\subsection{What the additional forecasting controls establish}
+The preceding forecasting study includes fixed risk-bin recalibration, forecast-value bins, top-risk-only uplift, minimum-support fallback, separately tuned residual learning with and without $q$, and frozen-backbone recalibration. Its role here is to supply stronger predictors and explicit limits on interpretation, not to claim a universally superior risk coordinate.
+
+\begin{table}[htbp]\centering\small
+\caption{Retained forecasting controls. All later learned-model comparisons are retrospective. FreshRetailNet non-stockout rows condition on realized availability; all-row metrics target recorded sales, not latent demand. M5 is the first-seed later development block.}
+\label{tab:forecast-controls}
+\begin{tabular}{lrrr}\toprule
+Forecast & M5 & FRN non-stockout & FRN all sales\\\midrule
+Group scale & 0.67139 & 0.32928 & 0.36162\\
+Forecast-value bins & 0.67045 & 0.32753 & 0.36154\\
+Risk bins & 0.66851 & 0.32741 & 0.36033\\
+Top-risk-only uplift & 0.66843 & 0.32504 & 0.35938\\
+Residual L1 with $q$ & 0.65956 & 0.29201 & 0.33401\\
+Residual L1 without $q$ & 0.66532 & 0.29289 & 0.33463\\\bottomrule
+\end{tabular}\end{table}
+
+On M5, bin-based recalibration adds only a modest gain over the parent and does not beat the residual learner. On FreshRetailNet, a 2,000-series cohort was fixed from training data before the original one-time seven-day evaluation. Its original risk-bin versus parent comparison has uncertainty sensitive to clustering. Later forecast-bin, uplift, and learned controls reuse this cohort; they are not additional prospective tests. The original non-stockout population contains 8,020 rows, versus 14,000 recorded-sales rows overall. Training/selection for the residual learner uses the chronological tail of the training partition (earlier two blocks for fitting; later three for selection), then refits on all five. The same six-setting grid selects depth 4 and 300 trees. The base, risk head, and categorical encoder remain fixed from earlier training.
+
+FreshRetailNet risk-bin minus residual WAPE is 0.03541 on non-stockout rows. Paired 95\% intervals are [0.02813,0.04273] by series, [0.02824,0.04368] by store, [0.01535,0.05326] by product, and [0.02135,0.04983] by date; only seven dates are available. The no-$q$ follow-up is adaptive and separately tuned. Its WAPE difference from the full residual learner is 0.00088, with product-cluster interval [$-0.00016$,0.00197]. Most forecasting improvement therefore cannot be attributed to the risk feature. The corrected predictor's RMSE decreases from 0.74595 to 0.62157 and signed bias from $-14.04\%$ to $-1.92\%$ on that population. It still worsens 777 of 2,000 series. None of these observations identifies demand on stockout rows or measures inventory cost.
+
+Frozen Chronos recalibration also improves within-backbone WAPE, but its calibration period differs from that of the main tabular predictor and its bin-control advantage changes under asymmetric pinball losses. These historical comparisons are preserved in the forecasting evidence archive. They are not pooled with the original external test or counted as independent natural-demand confirmation. Numerical dependency repairs and column-label audits are recorded there; the selected forecasts used in the present experiment reproduce the corrected reference values exactly.

@@ -1,0 +1,32 @@
+\begin{table}[p]
+\centering\small
+\caption{Prespecified first-seed held-out-item audit. Each lower coverage bound and upper WAPE bound uses nominal tail probability $0.05/48$ and 10,000 item-bootstrap draws. All 24 coverage bounds exceed 0.35; all 24 WAPE bounds exceed 0.64013. These are approximate bounds, not distribution-free certificates.}
+\label{tab:m5guardianbounds}
+\begin{tabular}{lllrrrr}\toprule
+Method & Period & Stratum & Coverage & WAPE & Cov. lower & WAPE upper\\\midrule
+Direct & A & All & 0.8914 & 0.6399 & 0.8745 & 0.7161 \\
+Direct & A & Foods & 0.8479 & 0.5997 & 0.8255 & 0.7035 \\
+Direct & A & Hobbies & 0.9041 & 0.8757 & 0.8520 & 0.9468 \\
+Direct & A & Household & 0.9437 & 0.6629 & 0.9288 & 0.7746 \\
+Direct & B & All & 0.8794 & 0.6495 & 0.8630 & 0.7225 \\
+Direct & B & Foods & 0.8322 & 0.6051 & 0.8113 & 0.7077 \\
+Direct & B & Hobbies & 0.8915 & 0.8739 & 0.8399 & 0.9367 \\
+Direct & B & Household & 0.9372 & 0.6865 & 0.9219 & 0.7828 \\
+Direct & Shadow & All & 0.8725 & 0.6282 & 0.8560 & 0.6959 \\
+Direct & Shadow & Foods & 0.8275 & 0.5801 & 0.8040 & 0.6704 \\
+Direct & Shadow & Hobbies & 0.8815 & 0.8789 & 0.8268 & 0.9429 \\
+Direct & Shadow & Household & 0.9290 & 0.6816 & 0.9127 & 0.7760 \\
+Two-head & A & All & 0.8895 & 0.6401 & 0.8729 & 0.7160 \\
+Two-head & A & Foods & 0.8488 & 0.6004 & 0.8272 & 0.7039 \\
+Two-head & A & Hobbies & 0.8954 & 0.8783 & 0.8413 & 0.9454 \\
+Two-head & A & Household & 0.9421 & 0.6642 & 0.9280 & 0.7737 \\
+Two-head & B & All & 0.8763 & 0.6504 & 0.8596 & 0.7236 \\
+Two-head & B & Foods & 0.8281 & 0.6059 & 0.8062 & 0.7073 \\
+Two-head & B & Hobbies & 0.8875 & 0.8763 & 0.8356 & 0.9370 \\
+Two-head & B & Household & 0.9359 & 0.6882 & 0.9211 & 0.7827 \\
+Two-head & Shadow & All & 0.8746 & 0.6296 & 0.8587 & 0.6971 \\
+Two-head & Shadow & Foods & 0.8318 & 0.5818 & 0.8089 & 0.6712 \\
+Two-head & Shadow & Hobbies & 0.8811 & 0.8787 & 0.8278 & 0.9394 \\
+Two-head & Shadow & Household & 0.9296 & 0.6834 & 0.9145 & 0.7762 \\
+\bottomrule\end{tabular}
+\end{table}

@@ -1,0 +1,73 @@
+{
+  "utc": "2026-09-12T07:21:35.725140+00:00",
+  "scope": "Retrospective selection reanalysis using consumed data and existing fitted heads. Not preregistered confirmation, risk certification, or improved moment estimation.",
+  "primary_epsilon": 0.005,
+  "epsilon_grid": [
+    0.0,
+    0.001,
+    0.0025,
+    0.005,
+    0.01
+  ],
+  "epsilon_units": "coverage fraction; primary .005 means 0.5 percentage points",
+  "epsilon_rationale": "An explicitly allowed calibration exposure utility concession. Not estimated from noise or tuned to select Ratio; the entire fixed grid is reported.",
+  "head_pairs": [
+    [
+      220,
+      220
+    ],
+    [
+      660,
+      220
+    ],
+    [
+      220,
+      660
+    ],
+    [
+      660,
+      660
+    ]
+  ],
+  "arms": [
+    "censored",
+    "complete"
+  ],
+  "cap_relative_factor": 0.95,
+  "original_floor": 0.35,
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "numerical_tolerance": 1e-12,
+  "original_policy": "Frozen fitted heads, original cap, all original whole-tie candidate thresholds, and original threshold-existence eligibility; case choice unchanged.",
+  "exposure_selection": "Among eligible candidates with min-window exposure coverage at least the maximum minus epsilon (comparison tolerance 1e-12), maximize min-window case coverage, then exposure coverage, then original METHODS order. Epsilon zero is lexicographic tie-breaking; positive epsilon changes the declared objective.",
+  "freeze": "Write all calibration choices and hash before loading EVALUATION.npz or reading original RESULTS.json outcomes during the run. Input file hashing is not outcome access.",
+  "evaluation": "Later consumed evaluation: both coverage utilities, risk, contrasts against unchanged case choice and changes from original exposure choice; evaluation exposure concession is not bounded by calibration epsilon.",
+  "stability": "Reuse exactly the existing 200 threshold-redesigned draws for complete 220/220 and Bike; fitted heads, scores, caps, and normalization fixed. All selection/no-choice frequencies for every epsilon. Not new draws or eight-cell resampling.",
+  "validation": "Independent ordered lexicographic oracle; original choices; calibration statistics reconstructed from arrays; every selected concession <=epsilon+1e-12; epsilon=0 reproduces original when exposure maximum unique; raw draw reconstruction.",
+  "model_fits": 0,
+  "threshold_fits": 0,
+  "new_external_openings": 0,
+  "code_sha256": "986e00b8ba2080c93e95919931bc873ad072886fa2b7e951c617e81be6013195",
+  "input_sha256": {
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "evidence/matched_censoring/censored/FROZEN.json": "3150089310a44a15bad212d1716b04a4edb3d7c867f9e4d570563d7ab4a919ce",
+    "evidence/matched_censoring/censored/CALIBRATION.npz": "25e6e921fe5abfe300f43548ac678a25763eff6b961c958e2a66a3beedc58c10",
+    "evidence/matched_censoring/censored/EVALUATION.npz": "0bbb826bb037282f85904bcaa29bea00e42da613a6ae4eb4e7fbd36eaab29edc",
+    "evidence/matched_censoring/censored/RESULTS.json": "04689584de7dc8cee2af537339eca421bd328033f42a1bb5a327d94f1ec1a48d",
+    "evidence/matched_censoring/complete/FROZEN.json": "18db9c914420f151224e070ea83b91d73b1cd9ec6b0a60b8caa409ae7cf561cb",
+    "evidence/matched_censoring/complete/CALIBRATION.npz": "59e00cd710d4ccf6771327df1349ec19e1ced26afa9be2413641a67d10886dd1",
+    "evidence/matched_censoring/complete/EVALUATION.npz": "38b6adcecab1f2fe937a92290b4f6cef9603bd6fac2e37dfec7962e57de56003",
+    "evidence/matched_censoring/complete/RESULTS.json": "6caa704bf977de190b64faa1b79e3a1f6f54b4fec59e4604dc02621fd0147a60",
+    "evidence/revision_v7_stability/complete_220_220/FULL_DRAWS.npz": "5743d75c87509f2533c2fa08d9aafa410e21a955f9c4cba4a3d02a61c6a101d8",
+    "evidence/revision_v7_stability/complete_220_220/POINT.json": "fa8906dc3cc4250554d5ccbb6ebef10ae7010fb2fd5eaa712c32dea994c90482",
+    "evidence/revision_v7_stability/complete_220_220/FULL_RESULTS.json": "ffaa51d4ba47fd102823952ca2dd1127dd45663f5641e67e7f2d4887f0b9f43b",
+    "evidence/revision_v7_stability/bike/FULL_DRAWS.npz": "cb78c91b4a22ae2d473a31452284bb6283dd8f5c1d75ddf2d84dd2c9b40522a6",
+    "evidence/revision_v7_stability/bike/POINT.json": "e5ec76b86f5f185e05f35eda55422581a2d75ded4ecb0464e0a678764d710508",
+    "evidence/revision_v7_stability/bike/FULL_RESULTS.json": "05b63f2a02f2ed14b96378097a8ccb27d3714d668e4a745e05f42ced8810b701"
+  }
+}

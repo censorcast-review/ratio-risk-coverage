@@ -1,0 +1,16 @@
+\begin{table}[H]
+\centering\small
+\caption{One-time external comparison: 610 items, days 1919--1941. Two policies were fixed before opening; thresholds and heads are unchanged. Point WAPE passes the pooled cap, but the 48-endpoint operating check fails.}
+\label{tab:external}
+\begin{tabular}{lrrr}
+\toprule
+Fixed policy & Rows (\%) & Demand (\%) & WAPE\\
+\midrule
+Row utility, $\lambda=1$ & 85.92 & 83.19 & 0.6065 \\
+Mixed utility, $\lambda=0.25$ & 82.57 & 88.35 & 0.6081 \\
+\bottomrule
+\end{tabular}
+\par\smallskip\begin{minipage}{0.97\linewidth}\footnotesize
+Only the first seed and $\lambda\in\{1,0.25\}$ were frozen for this test. The pair was selected after the first holdout; other external seeds and the full $\lambda$ grid were not evaluated. The test verifies transfer of this selected contrast.
+\end{minipage}
+\end{table}

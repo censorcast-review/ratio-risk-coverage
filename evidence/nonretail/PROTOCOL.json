@@ -1,0 +1,63 @@
+{
+  "created_utc": "2026-09-09T00:58:33.479774+00:00",
+  "seed": 20260910,
+  "datasets": [
+    "Delicious (LIBSVM redistribution of Mulan)",
+    "UCI Bike Sharing hourly"
+  ],
+  "status": "additional investigation after disclosed Yeast null; all planned settings reported",
+  "primary_cap_factor": 0.85,
+  "secondary_cap_factors": [
+    0.75,
+    0.95,
+    1.05
+  ],
+  "calibration_safety_factor": 0.95,
+  "row_floor": 0.35,
+  "selectors": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "mixed_lambda": 0.25,
+  "selection": "largest whole-tie observed calibration threshold under 0.95 times reporting cap and row floor; include accept-all if it meets calibration constraints",
+  "uncertainty": "4000 paired resamples; Delicious examples, Bike days; marginal 95% and familywise 98.75% intervals for two coverage differences across two primary dataset comparisons",
+  "primary_contrast": "demand minus row; primary Delicious threshold .5",
+  "delicious": {
+    "split": "seeded row permutation 60 percent fit,20 percent calibration,20 percent test; parse test labels only after model/threshold freeze",
+    "classifier": "one-vs-rest LogisticRegression solver liblinear C=1 max_iter=2000, no class weighting; provided binary features; threshold .5 primary and .2 secondary",
+    "loss": "false-positive count per example",
+    "weight": "number of predicted-positive labels",
+    "estimated_loss": "sum of 1-p over predicted positive labels"
+  },
+  "bike": {
+    "split": "seeded day-group permutation 40 percent predictor fit,20 percent error-head fit,20 percent calibration,20 percent test",
+    "features": [
+      "season",
+      "yr",
+      "mnth",
+      "hr",
+      "holiday",
+      "weekday",
+      "workingday",
+      "weathersit",
+      "temp",
+      "atemp",
+      "hum",
+      "windspeed"
+    ],
+    "excluded": [
+      "instant",
+      "dteday",
+      "casual",
+      "registered",
+      "cnt"
+    ],
+    "predictor": "LightGBM quantile alpha=.5, 200 trees,31 leaves, min_child_samples=30, learning_rate=.05",
+    "heads": "Poisson mean on predictor-fit rows; squared-error absolute-loss head on disjoint error-head rows, same tree settings",
+    "risk": "absolute error / recorded bicycle rentals",
+    "scope": "retrospective conditional prediction using contemporaneous weather, not operational future-weather forecasting"
+  }
+}

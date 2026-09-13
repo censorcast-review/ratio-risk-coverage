@@ -1,0 +1,18 @@
+{
+  "configuration": {
+    "depth": 8,
+    "eta": 0.03,
+    "extra_features": [
+      "cross-store item lag 1/7/28",
+      "cross-store item mean 7/28/56",
+      "cross-store item hit rate 28"
+    ],
+    "rounds": 750
+  },
+  "created_utc": "2026-09-07T05:59:27.085191+00:00",
+  "information": "all aggregates end at forecast origin; no target or future sales",
+  "scope": "validation-only feature pilot",
+  "script_sha256": "f1e43a629f1c0cbb65d7dc221f03b19a7537d9b8724d0597922ac50341135183",
+  "seed": 20260906,
+  "status": "FROZEN_BEFORE_FIT"
+}

@@ -1,0 +1,14 @@
+\begin{table}[t]
+\centering\small
+\caption{Previously held-out M5 items: fixed pooled thresholds, 610 items, 6,100 series, and 695,400 shadow rows. Three-seed means; all fits and thresholds were frozen before opening. Seeds measure training variability, not three independent holdouts. Absolute-error selection accepts no rows and has undefined WAPE.}
+\label{tab:m5guardian}
+\begin{tabular}{lrrr}\toprule
+Score & Row coverage (\%) & Demand coverage (\%) & WAPE\\\midrule
+Forecast-normalized & 80.87 & 87.65 & 0.6219 \\
+Demand-normalized & 73.62 & 88.23 & 0.6219 \\
+Forecast excess & 82.74 & 74.59 & 0.6251 \\
+Two-head excess (440) & 87.41 & 83.69 & 0.6297 \\
+Two-head excess (220) & 87.67 & 84.18 & 0.6297 \\
+Direct excess (220) & 87.37 & 83.29 & 0.6280 \\
+\bottomrule\end{tabular}
+\end{table}

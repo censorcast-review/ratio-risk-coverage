@@ -1,0 +1,51 @@
+{
+  "schema_version": "external-descriptive-budget-1",
+  "prepared_utc": "2026-09-06T16:08:32.323152+00:00",
+  "purpose": "Retrospective Eq. (6) budget decomposition of exactly the two completed frozen external policies.",
+  "inferential_status": "Descriptive only; specified after the registered external result was known, not a new confirmatory endpoint.",
+  "data_scope": "Previously saved prediction cache only; no retrieval or reopening of source external outcomes.",
+  "period": [
+    1919,
+    1941
+  ],
+  "expected_rows": 140300,
+  "policies": [
+    "composed_excess_lambda_1",
+    "mixed_utility_lambda_0_25"
+  ],
+  "set_definitions": {
+    "K": "Accepted by both policies",
+    "U": "Accepted only by composed excess (lambda=1)",
+    "V": "Accepted only by mixed utility (lambda=0.25)",
+    "N": "Accepted by neither"
+  },
+  "summaries": [
+    "row count",
+    "demand mass and coverage",
+    "absolute-error mass",
+    "WAPE",
+    "forecast sum and mean",
+    "signed excess E-rM",
+    "common-set slack",
+    "incremental slack consumption",
+    "Eq. (6) identity"
+  ],
+  "excluded": [
+    "new policy",
+    "superseded pair",
+    "new threshold or scale",
+    "new fit",
+    "new subgroup or period analysis",
+    "raw external inputs",
+    "new hypothesis test or confidence interval"
+  ],
+  "input_sha256": {
+    "code/review5_external/EXTERNAL_PLAN.json": "8173b957c2c1d4fdb3a962862a4435a1531e378569f8a6602d02af97a0dd7f1d",
+    "results/external_confirmation/EXTERNAL_COMPARISON.json": "61fd5159b8b152626f2d14eaea6074985575140da6c8db89440321fd0ab195b9",
+    "code/review5_external/evaluate.py": "b9b3b0a93ab2f636f583c5e56faa720872c9e896169dbf8f10596d05f4ee4928",
+    "results/external_confirmation/prediction_cache/external_predictions.npz": "093c0609f477f4fe9df7b0f34adb1bf93aa7c6b9315a0feb9a9987f4f311431e",
+    "results/external_confirmation/prediction_cache/external_head_scores.npz": "d3d42a2c54e296d25b018a89240214e0175c335f3313f82a6d32f37b72af2b4f"
+  },
+  "script_sha256": "7544120787f742298f637e57235e0866f85274a18ee5061e02f03106e23c85d7",
+  "cache_arrays_loaded_at_preparation": false
+}

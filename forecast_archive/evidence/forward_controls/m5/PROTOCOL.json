@@ -1,0 +1,32 @@
+{
+  "bins": 8,
+  "bootstrap": {
+    "draws": 4000,
+    "seed": 20260910
+  },
+  "created_utc": "2026-09-08T18:56:23.188479+00:00",
+  "grid": {
+    "depth": [
+      2,
+      4
+    ],
+    "learning_rate": 0.03,
+    "min_child_samples": 50,
+    "trees": [
+      50,
+      150,
+      300
+    ]
+  },
+  "max_fit_rows": 200000,
+  "max_refit_rows": 400000,
+  "mode": "m5",
+  "new_holdout_openings": 0,
+  "scope": "fixed retrospective controls; no unused data claim",
+  "script_sha256": "a4915976da5ac6f28f48cde13802bf2ee7f0494cfe19007dc66c90a544e0aded",
+  "seed": 20260910,
+  "shrink": 0.75,
+  "sparse_rule": "fallback to group if fewer than 30 distinct calibration series with positive raw forecasts",
+  "stacking": "L1 residual GBM; frozen base/risk+origin-valid history; train earlier calibration block, select later calibration block, refit combined",
+  "top": "global single uplift >=1 only above original pooled 7/8 risk quantile"
+}

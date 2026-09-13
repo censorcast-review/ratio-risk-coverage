@@ -1,0 +1,28 @@
+{
+  "utc": "2026-09-12T09:42:58.450908+00:00",
+  "reason": "Independent verification found an incomplete original NPZ: four complete CRC-valid local members, no central directory, and no w660/y/blocks members. Its hash already matches the training completion record, so this is not a subsequent detected file change. Cause of incomplete serialization is unknown.",
+  "action": "Replay all seven calibration arrays from frozen models and existing development data; require exact equality for four surviving arrays. Preserve the original file and every result. No fit, new seed, policy selection, or tuning.",
+  "source_sha256": {
+    "code/recover_seed_archive_v12.py": "75fe5c282d1e891aa49e185a27b109c6db7d026849b6c739c2f6d37ad5faca44",
+    "code/run_paired_seed_v12.py": "91a409431e3ae490ecfe48f9ceabedec87cfb6a767b851f1b01d6ce8b9a5fcb3",
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "forecast_archive/code/replay_m5.py": "07056531a52556481aafc9a8ae712ccd1d328dbb96e2a26a870b829a363cea5e",
+    "forecast_archive/code/m5/legacy_features/features.py": "3b2bd1cc61b1d5108fa21b0cca13fc8e17fad9014d878ba8ab461f3648adee41"
+  },
+  "frozen_sha256": {
+    "evidence/revision_v12_seeds/seed_20260914/censored/CALIBRATION.npz": "607c96185ba45b023304dd1553e3347b8f9cceb1a607d46d8efd4c6537017121",
+    "evidence/revision_v12_seeds/seed_20260914/censored/EVALUATION.npz": "9fe25cfad57b2da5bf97f76e551ca87ae187953f784e5f2e93b2e4a5c79e80e7",
+    "evidence/revision_v12_seeds/seed_20260914/censored/FROZEN.json": "1cd636bfcb4785500140a42e03cde23cfb0448345d57f3981d436161bbc3b5cd",
+    "evidence/revision_v12_seeds/seed_20260914/censored/POINT.txt": "f02c5ef4735dfa4330a6175ddf310c5f51b788bf9636c5d46838ad3fe7287213",
+    "evidence/revision_v12_seeds/seed_20260914/censored/RESULTS.json": "708bbd4581d0ab05e6346fb88485dd3b50b1601c2a55fceef92ddb5a1ef6cf4a",
+    "evidence/revision_v12_seeds/seed_20260914/censored/e220.txt": "2ea7000ca7430dbda1105967e04f118790f1cd6f45b2e5b79d89890b9d2364a2",
+    "evidence/revision_v12_seeds/seed_20260914/censored/e660.txt": "a0f93931e399a335c43928e8aa5583885da225251da59152207658def46eca25",
+    "evidence/revision_v12_seeds/seed_20260914/censored/w220.txt": "2646b609cd434bd274d216a88477e18b9e7f259c4cb69e10c47e4528c26d3d76",
+    "evidence/revision_v12_seeds/seed_20260914/censored/w660.txt": "eba5c558bad71f87b5325d1839af5151633a610d7f099130efeb41471c69e264"
+  },
+  "input_sha256": {
+    "calendar.csv": "d12b5914ef03e66649adf5dd9e996e6602251c22b7a6af8f1f7e3aa12f8860f5",
+    "design_outcomes_v0_5.npz": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "sell_prices.csv": "9da3ad1f8b8ccacdbdc70612191dd375ec24a4ac6625c24b75b3bc60b0bed2ef"
+  }
+}

@@ -1,0 +1,12 @@
+\begin{table}[t]
+\centering\small
+\caption{Explicit objective-based family selection among the seven original scores, followed by threshold application to shadow periods. Three-seed means. Both objectives retain WAPE cap 0.64013 and row floor 0.35 in calibration A/B. Guardian rows are post-hoc reuse of the same consumed holdout, not new confirmation.}
+\label{tab:objectives}
+\begin{tabular}{lllrrr}\toprule
+Cohort & Objective & Selected score & Rows (\%) & Demand (\%) & WAPE\\\midrule
+Design & Row & Direct excess (220) & 86.30 & 80.86 & 0.6245 \\
+Guardian & Row & Direct excess (220) & 87.37 & 83.29 & 0.6280 \\
+Design & Demand & Demand-normalized & 74.17 & 89.01 & 0.6260 \\
+Guardian & Demand & Demand-normalized & 73.62 & 88.23 & 0.6219 \\
+\bottomrule\end{tabular}
+\end{table}

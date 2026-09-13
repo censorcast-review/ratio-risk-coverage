@@ -1,0 +1,20 @@
+{
+  "change": "omit learned q only; retain original history and availability features; same six-setting chronological selection",
+  "created_utc": "2026-09-08T18:59:50.153644+00:00",
+  "fit_cap": 200000,
+  "grid": {
+    "depth": [
+      2,
+      4
+    ],
+    "trees": [
+      50,
+      150,
+      300
+    ]
+  },
+  "refit_cap": 400000,
+  "scope": "Follow-up after observing forward-stacking superiority; consumed outcomes, not confirmation",
+  "script_sha256": "d2b010c23eb29c1d6a97f94588532929673882399932048f3a58aa5e8d000c9f",
+  "seed": 20260910
+}

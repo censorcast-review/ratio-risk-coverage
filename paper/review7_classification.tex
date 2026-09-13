@@ -1,0 +1,45 @@
+% Fixed-classifier application; append to Appendix A.2.
+\paragraph{Fixed classifiers: the unit of abstention matters.}\label{app:classification}
+For ordinary binary precision, let $h(X)\in\{0,1\}$ be fixed,
+$W=h(X)$, and $L=h(X)\ind\{Y=0\}$, with $T=\Pr(h(X)=1)>0$.
+An unrestricted gate observing $h(X)$ cannot exhibit strict optimal
+coverage reversal. Completing any feasible gate $a$ by accepting every
+predicted-negative case leaves its risk and exposure unchanged and gives
+\[
+ a^+=(1-h)+ha,\qquad c(a^+)=1-T+T d_W(a).
+\]
+Whenever a positive-exposure feasible gate exists, $\sup c=1-T+T\sup d_W$: every row optimum is exposure-optimal,
+and an exposure optimum can be completed to a row optimum.
+This also holds with a common minimum row coverage.
+
+A fixed \emph{multi-label} classifier with whole-example abstention does
+exhibit reversal, because cases can contain different numbers of positive
+predictions. Take two labels and three fully observed contexts:
+\[
+\begin{array}{c|ccc}
+ &K&U&V\\\hline
+ \Pr(X)&2/5&2/5&1/5\\
+ h(X)&(1,0)&(1,0)&(1,1)\\
+ w=\#\text{positive predictions}&1&1&2\\
+ \ell=\E[\#\text{false positives}\mid X]&0&3/10&1/2
+\end{array}
+\]
+At $K$, $Y=(1,0)$; at $U$, $Y=(0,0)$ with probability $3/10$
+and $(1,0)$ otherwise; at $V$, $Y=(1,0)$ or $(1,1)$ equiprobably.
+The gate observes all of $X$ and independently accepts the entire
+prediction vector with probability $a(X)$.
+The risk is one minus accepted micro-precision, with $r=1/10$ and
+$c_0=7/20$. Every optimum accepts $K$; the remaining budget is
+$4a_U+3a_V\leq2$. The unique row and exposure optima are
+\[
+\begin{array}{c|ccc}
+ &a&(c,d_W)&R\\\hline
+ \text{rows}&(1,1/2,0)&(3/5,1/2)&1/10\\
+ \text{positive exposure}&(1,0,2/3)&(8/15,5/9)&1/10
+\end{array}
+\]
+Hence $\Delta c=1/15$ and $\Delta d_W=1/18$.
+Dividing both $L,W$ by two gives $0\leq L\leq W\leq1$ without
+changing these results. Exact vertex enumeration and an independent LP
+verify both optima. The example uses whole-case acceptance; independently
+gating each label would define a different decision problem.

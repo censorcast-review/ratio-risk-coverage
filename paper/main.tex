@@ -1,0 +1,193 @@
+\documentclass{article}
+\usepackage{iclr2027_conference,times}
+\usepackage{amsmath,amssymb,amsthm,booktabs,graphicx,multirow}
+\usepackage{placeins,float}
+\usepackage{hyperref,url}
+\hypersetup{hidelinks}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\mathbb{P}}
+\newcommand{\ind}{\mathbf{1}}
+\newtheorem{proposition}{Proposition}
+\newtheorem{theorem}{Theorem}
+\newcommand{\wape}{\operatorname{WAPE}}
+\input{tables/result_macros.tex}
+\input{tables/observable_macros.tex}
+\title{When More Predictions Cover Less:\\Accuracy and Coverage under Ratio Risk}
+\author{Anonymous authors}
+\begin{document}
+\maketitle
+\begin{abstract}
+Under a ratio-risk constraint, accepting more predictions can cover less exposure. We develop a budget audit of this mismatch: accurate high-exposure cases supply error slack for inaccurate low-exposure cases. Sharp examples, bounded-exposure limits, and non-reversal conditions delimit the mechanism; a conditional perturbation bound relates head accuracy to decision accuracy under explicit assumptions. Across three training seeds and four complete-sales retail head settings, exposure selection gains 7.78--12.05 coverage points while losing 15.81--36.54 case points. The exchange persists without artificial censoring. External tests on Dominick's oatmeal, Bibtex, and Mediamill, with protocols frozen before raw-data download, show the same point direction but all fail their declared joint coverage-and-screening criterion. Bibtex's net case loss is confined to forced single-label rows; Mediamill retains a point exchange without those rows but fails risk screening. A direct learned gate improves observed Bibtex coverage but also fails screening. These findings separate prediction accuracy, acceptance utility, and risk assessment without establishing population risk guarantees.
+\end{abstract}
+
+\section{Introduction}
+Selective prediction must specify both risk and acceptance utility. Case coverage gives each case equal value; exposure coverage weights its opportunity or demand mass. Under a ratio of accepted loss to accepted weight, that choice becomes part of the learning problem.
+
+Case coverage can increase while covered exposure falls. Equal value per case remains a legitimate objective, but cannot stand in for exposure coverage. The threshold rankings are established; our contribution is to quantify their disagreement. We give nearly maximal joint gaps, a bound under bounded exposure, and conditions excluding reversal. The acceptance unit matters: fixed multi-label prediction with whole-example abstention can reverse the objectives, whereas ordinary binary precision with an unrestricted gate admits a common optimum.
+
+Retail WAPE makes the mechanism concrete. Well-predicted high-volume cases create pooled error slack that pays for many poor low-volume predictions. Our main experiment refits matched retail pipelines with artificially censored and complete recorded sales. It measures the coverage mismatch without proposing a new forecasting architecture. Frozen external tests extend the audit to another retailer and to multi-label micro-precision; archived mobility and forecasting comparisons have supplementary roles.
+
+We compare case and exposure utility on a shared five-rule menu. Paired refits test the role of artificial censoring; calibration audits vary fitted heads, secondary utility, and the case floor. Accepted-set accounting explains the resulting budget allocations. The M5 analyses are retrospective. Three external tests separate coverage exchange from risk-screen passage, and direct learned gates test acceptance estimation with the classifier held fixed. All external joint criteria are reported, including nonattainment.
+
+\section{Related work and scope}
+\paragraph{Count-data evaluation.}
+\citet{kolassa2016count} explains why absolute-error measures, including weighted MAPE, can be unsuitable for retail count forecasts. Absolute loss elicits a median; when $\Pr(Y=0)\geq1/2$, zero is a median. Our new object is the acceptance budget: a poor relative-error row may still be inexpensive to accept. M5 established strong tabular forecasting baselines \citep{makridakis2022m5}; we use LightGBM \citep{ke2017lightgbm}. Mechanical censoring preserves complete evaluation targets; it is not a theoretical premise. Appendix~\ref{app:natural-diagnostics} covers natural-stockout identification.
+
+\paragraph{Ratio metrics and selective prediction.}
+Optimization of nondecomposable and ratio-of-linear classification metrics is well established \citep{dinkelbach1967,koyejo2014,narasimhan2015complex,bao2020fractional}. We instead fix the predictor and quantify disagreement between acceptance utilities under one ratio constraint.
+
+\paragraph{Selection and risk control.}
+Case coverage and its risk trade-off are foundational to selective classification \citep{elyaniv2010foundations,geifman2017selective}. SelectiveNet jointly trains prediction and rejection end to end \citep{geifman2019selectivenet}; our custom fixed-predictor gates compare acceptance estimation without reproducing joint SelectiveNet training. Conditional-loss thresholding is established in reject-option prediction \citep{franc2023reject}, as are group concerns in selective regression \citep{shah2022selective}. \citet{jones2021} show that selective classification can magnify group disparities. \citet{fisch2022} study calibration within the selected population; our distinct question is which population mass coverage rewards. Learn then Test and conformal risk control address calibration under explicit assumptions \citep{angelopoulos2021ltt,angelopoulos2024crc}. \citet{joshi2026postprocess} preserve agreement with a baseline policy under a chance constraint. We instead compare acceptance utilities under pooled signed excess $\E[a(e-r\mu)]\leq0$: accurate high-volume cases can subsidize inaccurate low-volume cases. Conditional thresholding is the shared mathematical tool; the distinct object here is the measurable disagreement between coverage utilities.
+
+
+\section{The acceptance constraint}
+\input{review5_ratio_theory.tex}
+
+\paragraph{Scope under censoring.}
+The mismatch theorem does not require censored observations. Its inputs are the conditional loss and exposure of a fixed predictor. Mechanical censoring lets us retain the complete target to estimate and audit these inputs; natural stockouts generally do not. Observed sales alone cannot certify a cap below one when compatible demand tails are unbounded (Appendix~\ref{app:identification}). This is a limit on identifying the theorem's inputs, not an additional explanation of objective reversal.
+
+\subsection{Calibration is a separate claim}
+\label{sec:calibration}
+Independent calibration clusters and known bounded cluster losses permit simultaneous finite-family concentration checks; the supplement states a standard Hoeffding construction (Appendix~\ref{app:calibration}). Our retail counts lack a justified population bound and share store/calendar shocks. Accordingly, development intervals are descriptive; the M5 comparisons use prespecified item-bootstrap approximations, not that theorem; external resampling schemes are stated separately.
+
+\section{Primary paired audit}
+\subsection{Data, predictors, and chronology}
+The main experiment uses 1,829 M5 items across ten stores (18,290 series). Two median-loss LightGBM pipelines share feature definitions, sampled rows, and model budgets. One uses artificially censored sales for histories and predictor targets; the other uses complete recorded sales. Both exclude capacity, fill, and hit features. Each 300-tree predictor fits 600,000 rows on days 1314--1554. Squared-loss error and exposure heads fit 600,000 rows on days 1555--1610. Their 220/660-tree factorial supplies four settings per arm. The protocol specifies the primary relative cap and full factorial; 220/220 is a reference, not a separately prespecified primary cell. Tree counts are not selected by validation or early stopping.
+
+Calibration A/B spans days 1611--1645 and 1646--1673; evaluation spans days 1800--1913 (2,085,060 rows), called Later in saved tables. The original paired fits use seed 20260910; two additional seeds, 20260913 and 20260914, repeat all ten fits each under a recorded specification. They change sampled training rows as well as learner randomness. Table~\ref{tab:matched-history} reports all three seeds; subsequent calibration and budget diagnostics retain the original seed. Appendix~\ref{app:matched} specifies the fits; Table~\ref{tab:experiment-map} maps the two paired predictors, archived L1/residual/Chronos comparisons, and new calibration audits to their separate protocols.
+
+Recorded M5 sales are the target $Y$. After 56 uncensored warmup days, the fixed mechanical process gives
+\begin{align}
+ L_t&=0.90L_{t-1}+0.10S_{t-1},&
+ C_t&=\max\{1,\lceil1.15L_t+0.25\sqrt{L_t+1}\rceil\},&
+ S_t&=\min(Y_t,C_t).
+ \label{eq:censor}
+\end{align}
+It hides 30.42\% of recorded sales mass and censors 12.67\% of development rows on days 1314--1913. Forecasts use origin-available information at horizons one through seven days. Retained complete targets train and calibrate both arms' audit heads. Removing artificial censoring does not remove possible natural stockouts from the original sales records or identify latent customer demand.
+
+\subsection{A common menu, two selection utilities}
+\label{sec:choice-design}
+For each seed and arm, the primary cap is .95 times its maximum full-coverage risk over calibration windows A and B; the original caps are .6647 for censored histories and .6327 for complete sales. Relative factors $\{.85,.90,.95,1,1.05\}$ match strictness relative to each arm. A separate absolute grid compares common risk levels, including .64012983268, the reporting cap of the archived study. Neither cap construction is a retail standard. Appendix~\ref{app:matched} reports every setting, including infeasible and accept-all outcomes.
+
+The shared five-rule menu ranks conditional absolute error $\hat e$, row excess $\hat e-r\hat\mu$, exposure-normalized error, descending predicted exposure $-\hat\mu$, or mixed utility. The conditional-error comparator uses regression-based uncertainty estimation \citep{franc2023reject}, recalibrated to our ratio cap; it does not reproduce SELE training. For $U_\lambda=\lambda c+(1-\lambda)d$ and a nonbinding row floor, mixed utility orders
+\begin{equation}
+ s_\lambda=\frac{\hat e-r\hat\mu}{\lambda+(1-\lambda)\hat\mu/T},\qquad
+ \lambda\in\{1,.25,0\},
+ \label{eq:mixed}
+\end{equation}
+where $T$ is a fixed head-training estimate of mean exposure. Positive-exposure ordering at zero is equivalent to $\hat e/\hat\mu$. The menu uses no denominator floor. For each ranking, all distinct calibration scores and accept-all are searched; the largest complete-tie threshold with empirical risk at most $r$ and case coverage at least .35 in both windows is retained. Infeasible candidates remain in the record. At the original primary caps, Error is infeasible in both paired arms and Bike; failed candidates remain reported.
+
+Within one nested ranking, both coverages increase with the accepted prefix. Utility therefore selects between candidate rankings, not different thresholds along the same family. Among eligible candidates $j$, we choose
+\begin{equation}
+ j_C=\arg\max_j\min_{b\in\mathcal B}\widehat c_b(a_j),
+ \qquad j_D=\arg\max_j\min_{b\in\mathcal B}\widehat d_b(a_j),
+ \label{eq:menu-choice}
+\end{equation}
+with $\mathcal B=\{A,B\}$ and a fixed tie order. Evaluation labels enter neither choice. An empty eligible menu returns no policy and undefined accepted risk. This audits a finite menu, not all possible gates. All headline exchanges use Equation~\eqref{eq:menu-choice}; Equation~\eqref{eq:tolerance} is a retrospective alternative.
+
+\subsection{Uncertainty and evidential scope}
+The primary intervals use 2,000 paired item-bootstrap draws and descriptive 95\% percentiles. Resampling retains all stores and dates of each item but does not remove shared store/calendar shocks. These intervals condition on fitted predictors, heads, and selected policies; they omit training and selection uncertainty. Their nominal level is not a simultaneous-risk guarantee (Section~\ref{sec:calibration}). The paired fits use previously evaluated development data, so chronology within the new computation does not create a fresh confirmation trial.
+
+Retrospective calibration audits hold fitted heads and reporting caps fixed: resampling measures selection stability, a tolerance rule specifies a secondary utility, and an A-design/B-screen procedure varies the row floor. Conditions are recorded before each new computation; all data had already been evaluated. Appendices~\ref{app:v7} and \ref{app:v8} give the full records. These original calibration audits add no fits. The external protocols in Section~\ref{sec:external-v12} were frozen before their respective raw-data downloads and compute each cap from A alone. Their resampling units and interval families differ and are reported explicitly.
+
+\section{Results}
+\subsection{The mismatch survives removal of artificial censoring}
+\label{sec:matched}
+\input{matched_main_table.tex}
+All 24 seed/head/arm settings exhibit the exchange. Across twelve complete-sales cells, exposure utility gains 7.78--12.05 demand points and loses 15.81--36.54 case points; censored ranges are +7.05--11.19 and -40.66 to -35.71. Table~\ref{tab:matched-history} summarizes three seeds; Appendix~\ref{app:seeds-v12} reports every cell. Direction persists, but magnitude and rule choice vary: complete 220/220 case loss has a 10.29-point sample SD. The additional seeds measure training-procedure sensitivity on the same M5 windows, not new-data generalization.
+
+Observed exchange ratios range from .223 to .615 in complete sales and .176 to .293 under censoring. All twelve matched seed/head point comparisons favor complete sales, without a claim of seed-inclusive confidence. The original four adjusted, fixed-policy intervals remain in Appendix~\ref{app:v8-exchange}; they do not cover training or reselection uncertainty. Arm-specific caps, predictors and rules differ, so these ratios are not causal or economic effects.
+
+In the original seed, complete-history refitting lowers full-coverage WAPE from .6853 to .6630. At the common absolute cap .64013, complete sales also gains 8.75 demand points for 13.21 case points forgone. Figure~\ref{fig:matched-history} shows cap dependence and family switches, which explain non-monotone differences. At relative caps of one or more, both choices accept all and the gap vanishes.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\linewidth]{matched_history.pdf}
+\caption{Original-seed (20260910) paired refits at 220/220. Tags identify the selected case/exposure rules at every point; coordinates show evaluation coverage differences. Rule changes explain non-monotone differences. The axis normalizes by each arm's maximum full A/B calibration risk. Overlapping accept-all points represent both arms. Table~\ref{tab:matched-history} summarizes three seeds; these original-seed lines connect declared caps, not Pareto frontiers.}\label{fig:matched-history}
+\end{figure}
+
+\subsection{Utility sensitivity and budget accounting}
+\label{sec:head-intervention}\label{sec:selection-stability}\label{sec:tolerance}\label{sec:complete-screen}\label{sec:mass}
+Original-seed diagnostics separate utility choice from estimation. At complete-sales 220/220, Ratio and Descending differ by only .027 calibration exposure points but 21.83 case points; 200 item-cluster redesigns select them in 51.5/48.5\% of draws. Untuned 660-tree heads change the choice without consistently improving MSE. A retrospective alternative values cases within an exposure allowance: for eligible candidates, let $\bar c_j=\min_b\widehat c_b(a_j)$ and $\bar d_j=\min_b\widehat d_b(a_j)$, and set
+\begin{equation}
+ \mathcal J_\varepsilon=\{j:\bar d_j\geq\max_k\bar d_k-\varepsilon\},
+ \qquad j_{D,\varepsilon}=\mathop{\rm lexargmax}_{j\in\mathcal J_\varepsilon}(\bar c_j,\bar d_j).
+ \label{eq:tolerance}
+\end{equation}
+Remaining ties retain the fixed order; case selection is unchanged. Every allowance in [.39,1.63] points selects Ratio in all four original-seed complete-sales cells. The illustrative .5-point choice gains 9.63--10.83 exposure points for 10.41--21.23 case points forgone; it is neither a recommended default nor an evaluation-loss bound. Under stricter A design at $.95r$ with $r=.632683$, Descending instead leads Ratio by 1.08--1.85 exposure points, outside this allowance. Raising the case floor from .35 to .40/.45 excludes Descending and selects Ratio. The separate B screen and Later risk summaries are approximate and conditional on fitted models. Figures, all floors, and exact allowance intervals remain in Appendices~\ref{app:v7}--\ref{app:v8}; headline results retain Equation~\eqref{eq:menu-choice}.
+
+Accepted-set accounting describes how either utility spends the same budget. For a common set $K$ and disjoint added set $U$, with exposure mass $M$ and positive denominators,
+\begin{equation}
+ R_{K\cup U}\leq r \quad\Longleftrightarrow\quad M_U(R_U-r)\leq M_K(r-R_K).
+ \label{eq:budget}
+\end{equation}
+The unscreened complete-sales 220/220 reference supplies 67,194 loss units of common-set slack. Its 485,906 case-only rows spend 74.72\%; 156,220 exposure-only rows carry over three times as much demand and spend 83.26\%. Their union exceeds the cap at its point estimate. Descriptive 95\% risk intervals for each policy and the union all cross the cap (Appendix~\ref{app:matched}). This accounting neither certifies population risk nor establishes Pareto-optimality; the conditional perturbation bound likewise requires unverified estimation, slack, and denominator assumptions (Appendix~\ref{app:plugin-v12}).
+
+\subsection{Three frozen external tests and learned gates}
+\label{sec:external-v12}\label{sec:external-v13}
+The external studies use a common cap convention: $r=.95R_A(1)$, A design at $.95r$, and case floor .40. Each protocol was frozen before its raw-data download. A fixes the cap, candidate thresholds, and case/exposure choices; B only screens those fixed choices. This differs from the retrospective M5 primary A/B cap. The three studies retain different prediction tasks and resampling designs, so their gaps are not estimates of a dataset effect. All declared joint criteria require both selected policies to pass B and directional coverage intervals to exclude zero.
+
+\input{external_v13_main_table.tex}
+
+Dominick's Oatmeal \citep{kiltsdominicks} has 4,839 store--UPC series from 66 products and 86 stores, with 85,039 Later records. Both selected policies pass B; the exposure interval includes zero (Appendix~\ref{app:external-v12}). Bibtex and Mediamill use fixed multi-label classifiers with whole-example abstention: exposure is the known predicted-positive count, loss is false-positive count, and risk is one minus micro-precision. A fixed .5 label threshold and top-one fallback ensure nonempty predictions. Bibtex passes B but does not confirm the exposure gain; Mediamill has both directional intervals excluding zero but fails B. Its eligible menu candidates have B point risks below the cap, so screen failure does not establish a risk violation. Descending is A-ineligible on both non-WAPE datasets: even its least-risk prefix satisfying the floor exceeds the reporting cap, unlike the M5 result. No prospective power calculation was documented for the two non-WAPE tests (Appendix~\ref{app:v13-nonwape}).
+
+Retrospectively excluding fallback rows while retaining the fitted classifier and all policy choices changes Bibtex's exchange to $+.71/+7.00$ case/exposure points ($n=566$). Its net case loss is confined to forced single-label rows, which contribute $-41$ accepted cases versus $+4$ elsewhere. Mediamill retains a point exchange, $-1.78/+2.99$ ($n=4,169$). These subgroup summaries neither test a refitted no-fallback classifier nor inherit a new risk qualification. Appendix~\ref{app:v13-nonwape} retains the complete decomposition, alternative Mixed weight, and split-risk diagnostics.
+
+Two custom primal--dual MLP gates per non-WAPE dataset use the same fixed classifier, feature information, and head-training rows as the menu. The Bibtex case gate improves Later case/exposure coverage by 6.56/6.99 points and lowers point risk from .40405 to .39922, but fails B; on B its point risk is .40247 versus .38342 for Excess. The other Bibtex gate also fails B. Mediamill's case gate is A-ineligible; its exposure gate gives $-1.81/+1.15$ points and fails B. No gate meets both eligibility and screening. These results establish neither menu nor gate superiority under the declared risk criterion and do not reproduce SelectiveNet's joint training.
+
+\FloatBarrier
+\section{Discussion}
+\paragraph{Choose utility before choosing a score.}
+The exact-information theorem does not prescribe the best estimated selector. Specify what acceptance rewards, compare a common menu under the same cap, and report both coverages. Equal value per case is a legitimate objective. An exposure gain cannot alone justify the associated case losses; the exchange ratio summarizes that trade, not a universal ordering of policies. In the original-seed complete-sales comparisons, Ratio's empirical value lies in covering more cases at similar or slightly lower exposure, with exposure allowances, higher case floors, and stricter-cap eligibility providing distinct, design-dependent routes to its selection.
+
+\paragraph{What the theoretical bounds describe.}
+The sharp construction bounds worst-case disagreement, not typical retail gaps. The bounded-exposure envelope needs a defensible positive lower bound. The finite two-label example reverses the objectives without vanishing exposure; binary precision and two-context laws delimit where reversal is impossible.
+
+\paragraph{Fitted scores and secondary utility.}\label{sec:objectives}\label{sec:groups}
+Exact-head rankings do not rank estimated policies. Equation~\eqref{eq:menu-choice} expresses pure case or exposure utility; Equation~\eqref{eq:tolerance} expresses case utility within an exposure allowance. Practice requires choosing this preference before outcomes are inspected; .5 points is not a recommended default. Its calibration allowance does not bound evaluation loss. At stricter relative caps .85/.90, Descending is infeasible. Complete-sales Ratio exceeds feasible runner-up Mixed by 4.01/3.43 calibration exposure points, but this is not a direct comparison with a feasible Descending or a causal test of error-head value (Appendix~\ref{app:v8-strict}). The non-WAPE prefix failures show that this estimated-rule ordering does not transfer unchanged across tasks.
+
+\paragraph{Prediction, utility, and risk are separate tasks.}
+Improving the predictor can enlarge what is feasible; choosing acceptance utility determines how that capacity is used. Neither step validates population risk. The primary sample-level budget findings and the separate approximate risk screen must retain their distinct scopes. Covered recorded sales are not measured profit, latent demand, or inventory-cost savings; an operational decision requires its own cost objective and validation.
+
+\section{Limitations}
+M5 uses three seeds on previously evaluated data; two were fixed after the original result. This coarsely describes training variability, not new-data generalization. The three external studies each use one learner seed and all miss their declared joint criteria. Local timestamped protocols are not public-registry preregistrations. Bootstrap summaries condition on fitted policies: M5 item resampling omits common calendar shocks; Dominick's weekly blocks retain co-movement but need stationarity assumptions; non-WAPE row resampling does not resolve feature overlap or unknown shot dependence. The two non-WAPE tests had no documented prospective power design. Fallback and menu conventions affect Bibtex's result; empirical exposure dispersion does not explain the cross-dataset gaps. The allowance is illustrative, heads are untuned, and Error is infeasible at the original M5 caps. Custom gates are one untuned architecture, not SELE or SelectiveNet. They neither establish a general selector ranking nor explain estimated Ratio's losses to Descending. No empirical screen is a population guarantee. Natural-stockout identification remains separate (Appendix~\ref{app:natural-diagnostics}); vanishing-exposure worst cases do not estimate observed gaps.
+
+\section{Conclusion}
+More accepted predictions need not cover more exposure. Three-seed paired refits preserve this mismatch without artificial censoring. Utility sensitivity and conditional bounds delimit the interpretation. Three frozen external studies show the same point direction but fail their joint criteria for distinct reported reasons; non-WAPE diagnostics and learned gates expose dependence on task and estimation choices. Specify utility, report both coverages and uncertainty, and assess risk separately.
+
+\label{end:main}
+
+\clearpage
+\section*{AI use statement}
+This manuscript was prepared with the assistance of ChatGPT, a language model developed by OpenAI, which was used for refining language. The authors have reviewed, revised and approved the final content.
+
+\section*{Ethics statement}
+Mechanically hidden recorded sales must not be represented as identified customer demand. Pooled acceptance can concentrate errors in particular product groups; we report those failures and do not recommend deployment from these results. No human-subject intervention, customer profiling, or live replenishment action was performed.
+
+\section*{Reproducibility statement}
+Manuscript sources and reproduction code are available at \url{https://github.com/censorcast-review/ratio-risk-coverage}. The anonymous supplementary package supplies manuscript sources, experiment and verification scripts, fixed protocols, all-candidate result records, and compact numerical replay inputs. Appendix~\ref{app:repro} gives historical preprocessing and dates; Appendix~\ref{app:proofs} gives proofs, Appendix~\ref{app:additional-v12} the three-seed and Dominick's records, and Appendix~\ref{app:v13-nonwape} the non-WAPE design. The README distinguishes included statistical replay from model refitting and lists omitted large assets explicitly.
+
+The complete research archive additionally preserves the original fitted models and row arrays, the earlier \texttt{evidence/revision\_v7\_*} through \texttt{revision\_v9\_*} records, \texttt{evidence/revision\_v12\_*}, and \texttt{evidence/revision\_v13\_nonwape/}. Verification and editorial records are under \texttt{docs/revision\_v12/} and \texttt{docs/revision\_v13/}. Archived absolute paths are provenance strings; replay commands resolve relative to the extracted root. Raw Dominick's and Mulan dataset downloads are not redistributed; source locations, hashes, and acquisition instructions are supplied. Historical CENSORCAST filenames identify the archive, not a censoring requirement.
+
+\bibliography{references}
+\bibliographystyle{iclr2027_conference}
+\appendix
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.85}
+\setcounter{topnumber}{4}
+\setcounter{totalnumber}{5}
+\input{appendix_review4.tex}
+\input{accuracy_appendix.tex}
+\input{additional_audits.tex}
+\input{nonretail.tex}
+\input{policy_choice_appendix.tex}
+\input{earlier_menu_results.tex}
+\input{matched_appendix.tex}
+\input{revision_v7_appendix.tex}
+\input{revision_v9_appendix.tex}
+\input{revision_v12_results_appendix.tex}
+\input{revision_v12_theory.tex}
+\FloatBarrier
+\input{appendix_n_v13.tex}
+\end{document}

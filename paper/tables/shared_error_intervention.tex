@@ -1,0 +1,17 @@
+\begin{table}[t]
+\caption{Development Hobbies interventions, first seed. The two shared heads use the same 600,000 rows; the two specialists use the same 107,384 Hobbies rows. All use 220 trees, the same point forecast and demand head. MSE uses the later development block. No common A/B threshold, or outcome-informed later-block prefix, meets the cap and 35\% row floor. Empty-policy WAPE is undefined.}
+\label{tab:hobbies_intervention}
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrrr}
+\toprule
+Error head & Train rows & MSE & Positive MSE & Rows (\%) & WAPE & Prefix (\%) \\
+\midrule
+Shared, 21 features & 600,000 & 2.3554 & 7.8403 & 0.00 & -- & 0.00 \\
+Shared, 29 features & 600,000 & 2.3370 & 7.7650 & 0.00 & -- & 0.00 \\
+Hobbies, 21 features & 107,384 & 2.4232 & 7.9048 & 0.00 & -- & 0.00 \\
+Hobbies, 29 features & 107,384 & 2.4399 & 7.9392 & 0.00 & -- & 0.00 \\
+\bottomrule
+\end{tabular}
+\end{table}

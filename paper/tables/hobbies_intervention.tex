@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrrrr}
+\toprule
+Error head & MSE & Positive MSE & Rows (\%) & WAPE & Prefix (\%) \\
+\midrule
+Shared, 21 features & 2.3554 & 7.8403 & 0.00 & -- & 0.00 \\
+Hobbies, 21 features & 2.4232 & 7.9048 & 0.00 & -- & 0.00 \\
+Hobbies, 29 features & 2.4399 & 7.9392 & 0.00 & -- & 0.00 \\
+\bottomrule
+\end{tabular}
+\caption{Development Hobbies intervention, first seed. Error-head MSE and positive-demand-day MSE use the later evaluation block. Rows/WAPE transfer a common A/B threshold; none exists. ``Prefix'' is the best later-block prefix meeting the cap and 35\% floor, using its outcomes descriptively; none is feasible. Empty policies have undefined WAPE.}
+\label{tab:hobbies_intervention}
+\end{table}

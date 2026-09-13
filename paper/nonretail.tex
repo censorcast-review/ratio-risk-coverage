@@ -1,0 +1,62 @@
+\section{Non-retail checks and additional diagnostics}\label{app:nonretail}
+\subsection{Design fixed before the new evaluations}
+After the Yeast result, we specify two additional datasets, a single seed (20260910), models, all selectors, primary reporting cap factor $.85$, and secondary factors $\{.75,.95,1.05\}$. Each reporting cap multiplies full calibration risk. Thresholds must satisfy $.95$ times that cap on calibration, supplying a fixed margin rather than a guarantee, and row coverage at least $.35$. Methods rank by predicted error, signed row excess, mixed utility ($\lambda=.25$), exposure ratio, or descending predicted weight. Every distinct calibration score is considered with whole ties; accept-all is also included when calibration permits it. Infeasible methods return an empty set and undefined risk. Results at loose reporting caps may still reject cases because calibration uses a margin.
+
+UCI Bike Sharing (\url{https://archive.ics.uci.edu/dataset/275/bike+sharing+dataset}) supplies recorded hourly rentals, not latent unconstrained demand. We randomize days into 40/20/20/20 percent predictor-fit, error-head-fit, calibration, and test groups. Calendar and contemporaneous weather variables are features; counts and their registered/casual components are excluded. Fixed LightGBM models use 200 trees, 31 leaves, learning rate $.05$, and minimum leaf sample count 30. The point predictor uses median loss; a Poisson head estimates mean exposure. Squared-loss regression estimates absolute errors on a disjoint head-fit partition. No censoring is introduced. The 3,477-hour test has 147 days. This split tests conditional prediction on new day groups, not chronological extrapolation with forecast weather.
+
+Delicious uses the LIBSVM redistribution of Mulan (\url{https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/multilabel.html}), with 500 supplied features and 983 labels. A seeded 60/20/20 row split separates fitting, calibration, and testing. Independent logistic classifiers use $C=1$, liblinear, and fixed probability threshold $.5$ (primary) or $.2$ (secondary). Weight is the predicted-positive count and loss is false-positive count. Test labels are parsed only after the model and all thresholds are frozen. At the primary cap, neither objective-specific family can meet the calibration constraint and row floor. This remains a negative result; empty-set intervals are not evidence of equivalence between useful policies.
+
+For each dataset we retain all declared results and perform 4,000 paired resamples of test units: days for Bike Sharing and examples for Delicious. Marginal 95\% intervals and 98.75\% percentile intervals are supplied. The latter apply a Bonferroni adjustment over two coverage differences in each of the two primary dataset comparisons, conditional on fitted models. They are approximate bootstrap statements, not distribution-free risk guarantees. No model or cap was changed after test evaluation. The subsequent menu audit in Table~\ref{tab:policy-choice} adjusts eight coverage endpoints at 99.375\%, using a separate declared bootstrap seed; the two interval families answer different reporting scopes, not independent replications.
+
+\subsection{Mobility reversal and its budget}
+At the primary cap, demand-minus-row coverage is $-13.34$ case points and $+5.01$ exposure points. The adjusted intervals are $[-15.86,-10.77]$ and $[2.27,8.16]$ points. Both test point risks are below $.13281$. The common set has 2,460 hours and supplies 5,219.29 loss units of slack. Row-only acceptance adds 596 hours and 15,531 rentals, costing 3,568.63; demand-only acceptance adds 132 hours and 49,847 rentals, costing 2,399.22. The union has risk $.13398$ and excess $+748.56$: these two observed additions cannot both fit the reporting cap. This decomposition is descriptive and was not a prespecified endpoint. The later risk audit finds that row, ratio, and union intervals all cross the cap (Appendix~\ref{app:policy-choice}); the budget comparison is therefore a sample-level result, not a joint population feasibility claim. In contrast, the original retail external sets have a feasible union; that experiment verifies a selected policy contrast rather than binding competition.
+
+\begin{table}[t]\centering\small
+\caption{Mobility primary test, cap $.13281$. Error-only is infeasible at calibration. Coverage is percent.}\label{tab:mobility}
+\begin{tabular}{lrrr}\toprule
+Ranking & Cases & Exposure & Risk\\\midrule
+Conditional error & 0.00 & 0.00 & --\\
+Row excess & 87.89 & 85.54 & 0.12999\\
+Mixed & 86.54 & 89.66 & 0.12962\\
+Exposure ratio & 74.55 & 90.56 & 0.12826\\
+Descending mean & 37.79 & 73.66 & 0.12396\\
+\bottomrule\end{tabular}\end{table}
+
+\subsection{Descending-demand baseline on M5}
+For the original cap and row floor, we use exactly the same two-block threshold calibration as the earlier sweep, substituting $-\hat\mu$ for the score. Table~\ref{tab:descending} shows that this simple ranking covers more demand than the fitted pure-ratio rule in all three cases, but accepts fewer rows. This refutes a universal empirical-superiority interpretation of estimated ratio ranking; it does not contradict the exact-conditional-information theorem.
+\begin{table}[t]\centering\small
+\caption{Descending predicted demand at the original M5 cap; development evaluation only.}\label{tab:descending}
+\begin{tabular}{lrrr}\toprule Predictor & Cases (\%) & Demand (\%) & WAPE\\\midrule
+Base & 45.24 & 88.24 & 0.62696\\
+Improved & 54.32 & 92.15 & 0.63058\\
+Chronos-2 & 41.14 & 86.06 & 0.62997\\
+\bottomrule\end{tabular}\end{table}
+
+\subsection{Rank agreement as a diagnostic, not a certificate}
+On positive estimated exposure, Kendall's $\tau$ between row-excess and ratio rankings is $.872$ for Yeast, $.300/.298/.347$ for the three M5 predictors, $.635$ for Bike Sharing, and $.760$ for Delicious's primary classifier. M5 uses a seeded 100,000-row sample; the smaller datasets use all test examples. The high Yeast agreement is consistent with similar acceptance sets, while lower agreement indicates scope for different allocations. Agreement alone does not determine thresholds, feasibility, exposure masses, or their generalization. In particular, Delicious is infeasible despite nonidentical rankings. These associations are descriptive, not an identified causal explanation or a necessary-and-sufficient diagnostic. Zero-exposure cases are excluded from the correlation and are not silently included in a positive-lower-bound envelope.
+\begin{table}[t]\centering\scriptsize
+\caption{Declared secondary non-retail results: row and exposure rankings. A dash denotes calibration infeasibility, not zero risk. All five ranking families are in the accompanying JSON records.}
+\begin{tabular}{llrrrrrr}\toprule
+Data/threshold & Factor & Row $c$ & Row $d$ & Row risk & Ratio $c$ & Ratio $d$ & Ratio risk\\\midrule
+Bike & 0.75 & 61.92 & 58.61 & 0.1124 & 57.95 & 78.85 & 0.1203\\
+Bike & 0.85 & 87.89 & 85.54 & 0.1300 & 74.55 & 90.56 & 0.1283\\
+Bike & 0.95 & 95.48 & 94.71 & 0.1398 & 91.54 & 97.64 & 0.1406\\
+Bike & 1.05 & 100.00 & 100.00 & 0.1515 & 99.63 & 99.97 & 0.1513\\
+Delicious 0.2 & 0.75 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.2 & 0.85 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.2 & 0.95 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.2 & 1.05 & 98.70 & 98.80 & 0.6380 & 97.76 & 98.65 & 0.6380\\
+Delicious 0.5 & 0.75 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.5 & 0.85 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.5 & 0.95 & 0.00 & 0.00 & -- & 0.00 & 0.00 & --\\
+Delicious 0.5 & 1.05 & 97.86 & 99.05 & 0.4242 & 94.19 & 98.48 & 0.4239\\
+\bottomrule\end{tabular}\end{table}
+
+\subsection{Original point-forecast adapter specifications}\label{app:original-adapter}
+The reference forecaster fits histogram gradient boosting with Poisson loss to observed sales. Its expectation--maximization (EM) correction repeatedly imputes censored responses using clipped Poisson means conditional on exceeding capacity, then refits; a separate classifier predicts censoring probability. New LightGBM controls share origin-valid features, 1.2 million sampled rows, 300 trees, 63 leaves, learning rate 0.05, and three seeds. Objectives are Poisson or L1 on observed sales, with an uncensored-row-only L1 ablation. For L1 forecast $b$, the adapter reuses the earlier EM prediction $e_{\rm EM}$ and predicted censor probability $\hat p_C$:
+\begin{equation}
+ f_{\alpha,\gamma}=b+\alpha\hat p_C^\gamma\max(e_{\rm EM}-b,0).
+ \label{eq:adapter}
+\end{equation}
+Only point selection chooses $\alpha,\gamma$. Controls include global/category rescaling and the same ungated correction. The supervised selector comparisons retain the first point seed and $(\alpha,\gamma)=(2,2)$. The sales-and-capacity extension uses the plain observed-sales L1 forecaster without this adapter.
+

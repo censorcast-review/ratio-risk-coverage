@@ -1,0 +1,70 @@
+{
+  "utc": "2026-09-10T03:36:46.883930+00:00",
+  "runtime": {
+    "lightgbm": "4.7.0",
+    "numpy": "2.3.5"
+  },
+  "scope": "retrospective paired development audit; no external opening; all outcomes previously evaluated",
+  "seed": 20260910,
+  "arms": [
+    "censored",
+    "complete"
+  ],
+  "point_days": [
+    1314,
+    1554
+  ],
+  "head_days": [
+    1555,
+    1610
+  ],
+  "calibration": [
+    [
+      1611,
+      1645
+    ],
+    [
+      1646,
+      1673
+    ]
+  ],
+  "evaluation": [
+    1800,
+    1913
+  ],
+  "sample_rows": 600000,
+  "point_trees": 300,
+  "head_trees": [
+    220,
+    660
+  ],
+  "head_objective": "squared error for both moments",
+  "point_objective": "median",
+  "absolute_caps": [
+    0.6,
+    0.62,
+    0.64012983268,
+    0.66,
+    0.68,
+    0.7
+  ],
+  "relative_caps": [
+    0.85,
+    0.9,
+    0.95,
+    1.0,
+    1.05
+  ],
+  "relative_reference": "max full-coverage calibration A/B risk per arm",
+  "primary": "relative factor .95",
+  "floor": 0.35,
+  "features": "28 common + six item aggregates; no capacity, fill, censor or hit features; prices taken at origin week",
+  "contrast": "exposure-choice minus case-choice; 2x2 error/mean head sizes at primary relative cap",
+  "inference": "2000 paired item-bootstrap; 95% descriptive, conditional on fits; no joint risk guarantee",
+  "source_sha256": "2d449c41143eac1c5d2715e750ceecf9c9aa01ab2927515a09b657203a3851c7",
+  "inputs": {
+    "calendar.csv": "d12b5914ef03e66649adf5dd9e996e6602251c22b7a6af8f1f7e3aa12f8860f5",
+    "design_outcomes_v0_5.npz": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "sell_prices.csv": "9da3ad1f8b8ccacdbdc70612191dd375ec24a4ac6625c24b75b3bc60b0bed2ef"
+  }
+}

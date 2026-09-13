@@ -1,0 +1,95 @@
+{
+  "utc": "2026-09-12T07:21:15.272143+00:00",
+  "scope": "Retrospective sensitivity analysis on consumed development data; conditional on one existing fit.",
+  "floors": [
+    0.35,
+    0.4,
+    0.45
+  ],
+  "head_pairs": [
+    [
+      220,
+      220
+    ],
+    [
+      660,
+      220
+    ],
+    [
+      220,
+      660
+    ],
+    [
+      660,
+      660
+    ]
+  ],
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "candidate_family_size": 60,
+  "inherited_within_floor_family_size": 20,
+  "primary_reporting_family": 60,
+  "report_cap": 0.6326834234117924,
+  "score_cap": 0.6326834234117924,
+  "design_cap": 0.6010492522412028,
+  "design_factor": 0.95,
+  "T": 1.2685216666666668,
+  "windows": {
+    "A": [
+      1611,
+      1645
+    ],
+    "B": [
+      1646,
+      1673
+    ],
+    "already_consumed_later": [
+      1800,
+      1913
+    ]
+  },
+  "threshold_design": "For every floor/head/ranking condition, redesign on A only: largest complete-score-tie threshold with positive mass, risk <= .95r and case coverage >= floor. No B retuning.",
+  "screen": "Positive accepted B exposure and item-bootstrap signed-excess upper <= 0; report both alpha=.05/20 and alpha=.05/60.",
+  "selection": "Separately maximize A case or A exposure coverage among B-screen passers, with fixed METHODS order for exact ties. Retain no-choice.",
+  "bootstrap": {
+    "unit": "item with all stores and days clustered together",
+    "draws": 4000,
+    "seed": 20260912,
+    "screen_one_sided_alpha": [
+      0.0025,
+      0.0008333333333333334
+    ],
+    "later_pointwise_risk_ci": [
+      0.025,
+      0.975
+    ],
+    "later_risk_upper_quantiles": [
+      0.9975,
+      0.9991666666666666
+    ],
+    "coverage_contrast_ci": [
+      0.025,
+      0.975
+    ],
+    "quantile_method": "linear; replicate axis zero",
+    "counts": "Same item counts shared across every condition, both windows, and later evaluation."
+  },
+  "comparators": "Compare each floor against floor .35 using the same family adjustment. Replicate v7 floor .35/family20 thresholds, screens, choices, and evaluation point metrics.",
+  "freeze": "Write all thresholds, both screen decisions, and both sets of utility choices before first evaluation-array access.",
+  "limitations": [
+    "Approximate conditional bootstrap statements, not population risk guarantees.",
+    "A and B share item clusters and fitted heads; temporal splitting does not imply independent item samples.",
+    "B screening and A design margin jointly form the procedure; no causal effect is attributed to B alone.",
+    "Three floors and four shared-head settings are sensitivity conditions, not independent replications.",
+    "Thresholds and selected choices are held fixed in later bootstrap intervals; fit and selection uncertainty is excluded.",
+    "All later data were consumed previously; this is not prospective validation.",
+    "Family60 upper quantile is based on only about 3.3 expected tail draws among 4000 and is Monte Carlo sensitive."
+  ],
+  "fit_calls": 0,
+  "new_external_openings": 0
+}

@@ -1,0 +1,12 @@
+\begin{table}[t]\centering\scriptsize
+\caption{Untuned tree-count sensitivity at each arm's primary cap. Error/exposure head tree counts vary factorially, with the point predictor fixed; tree counts were not selected by validation or early stopping. Larger heads are not uniformly more accurate, so these comparisons do not test whether improved moment estimates resolve the choice. MSE is evaluated against realized error or sales, not observed conditional moments.}\label{tab:matched-heads}
+\begin{tabular}{llrrlrr}\toprule
+Arm & Trees $e/w$ & Error MSE & Exposure MSE & Case / exposure rule & $\Delta c$ & $\Delta d$\\\midrule
+Artificially censored & 220 / 220 & 4.475 & 5.893 & Excess / Exposure descending & -39.95 & +7.05 \\
+Artificially censored & 660 / 220 & 4.510 & 5.893 & Excess / Exposure descending & -40.66 & +8.29 \\
+Artificially censored & 220 / 660 & 4.475 & 5.883 & Excess / Exposure descending & -37.94 & +8.08 \\
+Artificially censored & 660 / 660 & 4.510 & 5.883 & Excess / Exposure descending & -40.04 & +8.14 \\
+Complete recorded sales & 220 / 220 & 3.064 & 4.761 & Excess / Ratio & -15.81 & +9.72 \\
+Complete recorded sales & 660 / 220 & 3.119 & 4.761 & Excess / Exposure descending & -34.52 & +11.45 \\
+Complete recorded sales & 220 / 660 & 3.064 & 4.805 & Excess / Exposure descending & -34.85 & +9.88 \\
+Complete recorded sales & 660 / 660 & 3.119 & 4.805 & Excess / Exposure descending & -34.98 & +10.71 \\\bottomrule\end{tabular}\end{table}

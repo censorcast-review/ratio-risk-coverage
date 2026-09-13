@@ -1,0 +1,99 @@
+{
+  "created_utc": "2026-09-12T07:21:07.014956+00:00",
+  "analysis": "revision_v8_exchange",
+  "scope": "Retrospective development sensitivity on already evaluated data; no fresh confirmation.",
+  "inputs": {
+    "code/run_exchange_margin_v8.py": "32bc1a9697e61f1ccf6618a9ae743f0fb514120066d2e7d98f6928281162db0a",
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "evidence/matched_censoring/PROTOCOL.json": "a9e3f8283cd0d23dc86796f1eeaa745e52bd811711e3526d20d8284481f6217c",
+    "evidence/matched_censoring/censored/FROZEN.json": "3150089310a44a15bad212d1716b04a4edb3d7c867f9e4d570563d7ab4a919ce",
+    "evidence/matched_censoring/censored/RESULTS.json": "04689584de7dc8cee2af537339eca421bd328033f42a1bb5a327d94f1ec1a48d",
+    "evidence/matched_censoring/censored/CALIBRATION.npz": "25e6e921fe5abfe300f43548ac678a25763eff6b961c958e2a66a3beedc58c10",
+    "evidence/matched_censoring/censored/EVALUATION.npz": "0bbb826bb037282f85904bcaa29bea00e42da613a6ae4eb4e7fbd36eaab29edc",
+    "evidence/matched_censoring/complete/FROZEN.json": "18db9c914420f151224e070ea83b91d73b1cd9ec6b0a60b8caa409ae7cf561cb",
+    "evidence/matched_censoring/complete/RESULTS.json": "6caa704bf977de190b64faa1b79e3a1f6f54b4fec59e4604dc02621fd0147a60",
+    "evidence/matched_censoring/complete/CALIBRATION.npz": "59e00cd710d4ccf6771327df1349ec19e1ced26afa9be2413641a67d10886dd1",
+    "evidence/matched_censoring/complete/EVALUATION.npz": "38b6adcecab1f2fe937a92290b4f6cef9603bd6fac2e37dfec7962e57de56003"
+  },
+  "arms": [
+    "censored",
+    "complete"
+  ],
+  "heads": [
+    [
+      220,
+      220
+    ],
+    [
+      660,
+      220
+    ],
+    [
+      220,
+      660
+    ],
+    [
+      660,
+      660
+    ]
+  ],
+  "exchange": {
+    "relative_cap_factor": 0.95,
+    "definition": "delta_D / (-delta_C)",
+    "contrast": "original frozen exposure policy minus original frozen case policy",
+    "bootstrap": {
+      "draws": 4000,
+      "seed": 20260915,
+      "unit": "M5 item, jointly across stores and days",
+      "pairing": "Identical item multiplicities for all arms, cells, and branch comparisons.",
+      "conditional_on": "fixed original fitted models, heads, caps, thresholds, and menu choices",
+      "individual_percentiles": [
+        0.025,
+        0.975
+      ],
+      "four_arm_contrast_bonferroni_percentiles": [
+        0.00625,
+        0.99375
+      ],
+      "invalid_rule": "If any draw has nonpositive case-loss denominator or total exposure, report no ratio interval; never silently omit such draws."
+    },
+    "arm_comparison": "complete minus censored exchange ratio at each identical head pair",
+    "range": "point-estimate minimum and maximum over all four head pairs per arm"
+  },
+  "calibration": {
+    "relative_factors": [
+      0.85,
+      0.9,
+      0.95
+    ],
+    "heads": [
+      220,
+      220
+    ],
+    "floor": 0.35,
+    "sources": "original frozen thresholds; reconstruct all five candidate masks and calibration-window metrics",
+    "margin": "minimum calibration exposure coverage of Ratio minus Descending only when both feasible",
+    "other_margin": "Ratio minus strongest feasible other candidate; report winning candidate and eligible count"
+  },
+  "branch": {
+    "arm": "complete",
+    "heads": [
+      220,
+      220
+    ],
+    "relative_factor": 0.95,
+    "comparisons": [
+      "original frozen Excess versus Ratio",
+      "original frozen Excess versus Descending"
+    ],
+    "interpretation": "Deterministic alternative fixed-policy comparisons; not selection probabilities or optimality."
+  },
+  "safeguards": [
+    "No model fits",
+    "No new thresholds",
+    "No menu choices changed",
+    "No external outcomes opened",
+    "No claim that a fixed-policy interval includes calibration selection uncertainty",
+    "No causal conclusion about the error head from candidate margins"
+  ]
+}

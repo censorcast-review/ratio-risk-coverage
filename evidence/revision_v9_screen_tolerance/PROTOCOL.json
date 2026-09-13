@@ -1,0 +1,39 @@
+{
+  "utc": "2026-09-12T07:43:31.218711+00:00",
+  "scope": "Retrospective analytic audit of the v8 frozen A-design/B-screen menus, informed by the v8 review; not prospective preregistration.",
+  "input_sha256": {
+    "evidence/revision_v8_floor/PROTOCOL.json": "632764df9adcc7ec0f3283464a89368f02da7d20124ec072f6441ed932d74c31",
+    "evidence/revision_v8_floor/FROZEN.json": "cf0b24d5a925f559868ce7bc073d4554a23c0167b60b05c5ecda4c2f3c519911",
+    "evidence/revision_v8_floor/CALIBRATION_ITEM_STATISTICS.npz": "5490f4bed731eafe91f11d37df26eba81d539c5c00b1fe3640c742d3a0d81f1a"
+  },
+  "code_sha256": "5942747330a7dafba19ebc805cb11d67758f4b2d6736c29e0adb3eba3aa22d95",
+  "floors": [
+    0.35,
+    0.4,
+    0.45
+  ],
+  "screen_families": [
+    60,
+    20
+  ],
+  "primary_screen_family": 60,
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "candidate_eligibility": "Existing frozen threshold exists and existing B screen passes. No threshold redesign, B recomputation, or removal based on later outcomes.",
+  "utilities": "Single A-window case and exposure coverage, reconstructed exactly from frozen accepted row/weight counts and existing calibration aggregate denominators. Check against stored floating values.",
+  "selection": "Among eligible candidates within epsilon of maximum A exposure, maximize A case coverage, then A exposure, then METHODS order. Case policy unchanged.",
+  "analytic_interval": "For target k, L=max_j(d_j)-d_k. U=min_j[max_i(d_i)-d_j] over candidates with lexicographic priority above k. Selection is [L,U), or empty if L>=U; infinity if no higher-priority candidate. Report exact count-based rational endpoints and decimal percentage points.",
+  "implementation_tolerance": "Also report intervals after the inherited 1e-12 coverage-fraction admission slack: replace each admission gap g by max(0,g-1e-12). This differs by at most 1e-10 percentage points.",
+  "queries": "All individual intervals and all-four-cell intersections at each floor/family; choices at epsilon=0,.5,1,2 percentage points; A Descending-minus-Ratio exposure differences; the candidate ending each interval.",
+  "validation": "An independent cross-multiplied rational eligibility oracle at every boundary, immediately below/above, midpoints and the specified grid; interval-membership reconstruction; U20/U60 equality. No production selector imports.",
+  "model_fits": 0,
+  "threshold_redesigns": 0,
+  "new_resampling_draws": 0,
+  "evaluation_openings": 0,
+  "new_external_openings": 0
+}

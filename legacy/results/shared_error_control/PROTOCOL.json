@@ -1,0 +1,116 @@
+{
+  "schema": "shared-error-intervention-1",
+  "status": "FROZEN_BEFORE_FEATURE_RECONSTRUCTION_AND_FIT",
+  "frozen_utc": "2026-09-06T16:08:54.800883+00:00",
+  "scope": "POST_HOC_CONSUMED_DEVELOPMENT_ONLY",
+  "seed": 20260906,
+  "new_fits": 1,
+  "new_method": "shared_error_29",
+  "retained_comparators": [
+    "shared_error_21",
+    "hobbies_error_21",
+    "hobbies_error_29"
+  ],
+  "sample": "Exact original first-seed np.random.default_rng(20260906).choice(18290*118,600000,replace=False); all categories retained, in original order",
+  "training_days": [
+    1436,
+    1553
+  ],
+  "training_rows": 600000,
+  "parameters": {
+    "objective": "regression",
+    "n_estimators": 220,
+    "num_leaves": 31,
+    "learning_rate": 0.05,
+    "min_child_samples": 100,
+    "reg_lambda": 3,
+    "n_jobs": 4,
+    "random_state": 20260906,
+    "deterministic": true,
+    "force_col_wise": true,
+    "verbosity": -1,
+    "alpha": 0.85
+  },
+  "categorical_columns": [
+    17,
+    18,
+    19,
+    20
+  ],
+  "base_feature_count": 21,
+  "extra_features": [
+    "observed_positive_count_56",
+    "observed_positive_mean_56",
+    "observed_positive_cv2_56",
+    "observed_positive_recency_56",
+    "observed_positive_count_112",
+    "observed_positive_mean_112",
+    "observed_positive_cv2_112",
+    "observed_positive_recency_112"
+  ],
+  "target": "abs(float64(pre-mechanical-censoring truth) - frozen point forecast)",
+  "point_demand_cap_unchanged": true,
+  "cap": 0.640129832706689,
+  "row_floor": 0.35,
+  "score": "float32 clip(error,0) - r * float32 clip(frozen demand,0)",
+  "evaluation_population": "Hobbies series only, all three development blocks",
+  "evaluation_blocks": {
+    "calibration_a": [
+      1555,
+      1673
+    ],
+    "calibration_b": [
+      1674,
+      1793
+    ],
+    "shadow": [
+      1800,
+      1913
+    ]
+  },
+  "threshold_selection": "Largest common score threshold satisfying WAPE<=cap and row coverage>=.35 in both development A/B; if absent accept no rows",
+  "diagnostics": [
+    "all-row error-head MSE",
+    "positive-truth-day error-head MSE",
+    "mean error bias",
+    "fixed A/B-threshold metrics",
+    "outcome-informed blockwise largest feasible prefix"
+  ],
+  "prefix_scope": "Descriptive and outcome-informed; neither deployed nor independently validated",
+  "selection_before_later_block_metrics": true,
+  "point_forecast_fit": false,
+  "guardian_inputs_read": false,
+  "external_inputs_read": false,
+  "certificate_issued": false,
+  "raw_development_hash": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+  "source_sha256": "1cf5c9b315820a0899a66320addf548db84b7f1e6830163be0d76e812badbc2c",
+  "source_dependencies": {
+    "code/run_hobbies_intervention.py": "4559be6777fd572822d6f74be213a3b612ec6805e73a06b784335990c5a20c0f",
+    "code/run_selective_study.py": "34bbbe99e9fe553704e797dccc03676d9a9d887935b8627bb5001b0f932a7dd1",
+    "code/run_review2_objectives.py": "7ccff0daa03eafdc23b598ec22bfb6bd60691a42335030320b4f414d2d0daa60"
+  },
+  "prior_evidence_hashes": {
+    "PROTOCOL.json": "c66c1883a1d8f719f709963a1f739861b8a6f65be791857779794402b0129cee",
+    "RESULTS.json": "68d2524cf2e3ba6f03d13f8993392d3847d1b4e063e49cb240d8b65f55527fcc",
+    "cache/READY.json": "ae356366054c97192b8e5d8552a6aa7856505e4fe60066bce717531337bf9db0",
+    "cache/replayed_forecasts.npz": "2b295d2a7d3ca978f2658aa042625e453ef783edf4d57ba05cc97a4e45b4969b",
+    "cache/train.npz": "0f666c8089b407b7fa9ecac56082e5e0bbe986d3904e76ab50f4463f5896259c",
+    "cache/calibration_a.npz": "b73811003e23a3e784fa475a2f2b84956f2b34b88ce5b4d9b4526a15269d3734",
+    "cache/calibration_b.npz": "f37da4ae19c350ff02105f7ad334bbfc79ef3185871d4269288d9878c0d813cb",
+    "cache/shadow.npz": "571f7c820ffc778b370351e337f692f10de99c04f0666dbafba7a18db345b6c5"
+  },
+  "frozen_model_hashes": {
+    "bundle": "7c44b064f02a824405754e8c17761d4aa035234ea16472d9be34efc8169bd91b",
+    "point": "fc24d1ecc568f6b78e11f309e5008b94801e5f78ba5568fd2793973959c57bb0",
+    "error": "accf0bb1d97d13dccaa3517ad94842d3cb79d32370030debc7e9402f43bcfacf",
+    "demand": "7d59e0924552d35636260bd6c8e5cb90b38dc3ab51dc9d82af7f7fd16cd38f08"
+  },
+  "runtime": {
+    "numpy": "2.1.3",
+    "scipy": "1.16.3",
+    "scikit-learn": "1.6.1",
+    "lightgbm": "4.6.0",
+    "joblib": "1.5.3",
+    "pandas": "2.2.3"
+  }
+}

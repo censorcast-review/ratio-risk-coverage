@@ -1,0 +1,174 @@
+% Scientific appendix. Full numerical records and supplementary derivations are packaged separately.
+\section{Proofs, identification, and calibration}
+\label{app:proofs}
+\input{review5_ratio_rankings.tex}
+\input{review5_ratio_proofs.tex}
+\input{review7_classification.tex}
+\input{review8_bounded_exposure.tex}
+\paragraph{Additional WAPE example.} The supplement provides a deterministic three-context calculation in \texttt{docs/wape\_worked\_example.tex}. Its row- and demand-optimal coverages are $(73/80,11/46)$ and $(17/40,7/23)$ at cap $1/2$; \texttt{verify\_objective\_geometry.py} checks the fractions and efficient segment.
+
+\subsection{Censored-tail nonidentification and bounded-tail envelope}
+\label{app:identification}
+\input{identification_statement.tex}
+Let $O=(X,S,C,\Delta)$ have the fixed observable law, where $C\geq0$, $\E C<\infty$, and $\Delta=1$ means $D>C$. Fix $a(X)\in[0,1]$ and $0\leq f(X)\leq F<\infty$, and let $D_0$ be an integrable compatible completion. Put $B=\{\Delta=1\}$ and suppose $k=\E[a\ind_B]>0$. For $M>F$, replace $D_0$ on $B$ by $C+M$. This preserves $S=\min(D,C)$ and $\Delta$, and each completion remains integrable. Its accepted numerator and denominator are
+\[
+ \E[a|D_M-f|]=Mk+A_0,\qquad \E[aD_M]=Mk+B_0,
+\]
+where the finite constants are
+\[
+ A_0=\E[a\ind_B(C-f)]+\E[a\ind_{B^c}|D_0-f|],\qquad
+ B_0=\E[a\ind_B C]+\E[a\ind_{B^c}D_0].
+\]
+Consequently $R_M=(Mk+A_0)/(Mk+B_0)\to1$, violating any fixed $r<1$ for sufficiently large $M$. For actual randomized acceptance, introduce $U\sim\operatorname{Uniform}(0,1)$ independent of $(O,D_M)$ and let $A=\ind\{U\leq a(X)\}$. Since $\E[A\mid O,D_M]=a(X)$, the weighted expectations equal realized-acceptance expectations. No independence of $X,C,\Delta$ is required. The construction excludes rules with zero accepted censoring weight.
+
+If instead a valid bound gives $D\in[C,U]$, the function $z\mapsto|z-f|-rz$ is convex. Writing $z$ as a convex combination of the endpoints bounds its value by their maximum, proving equation~\eqref{eq:envelope}. Positive accepted demand and the coverage requirement remain separate conditions.
+
+\paragraph{Standard bounded-data calibration.}\label{app:calibration}
+For a finite family fixed independently of i.i.d. calibration clusters, known bounded cluster excess and coverage permit a simultaneous Hoeffding check \citep{hoeffding1963}. The supplement's \texttt{docs/standard\_calibration.tex} gives the full statement and proof, and the numerical record retains 400 synthetic trials. The unbounded, dependent retail observations do not meet those assumptions; no such guarantee is invoked here.
+
+\section{Data, fitted objects, and evaluation boundaries}
+\label{app:repro}
+\subsection{Archived partition, chronology, and implementation}
+This subsection documents the original selector study. Its model settings and training/calibration windows differ from the primary paired refits in Section~4 and Appendix~\ref{app:matched}; sharing evaluation dates does not make the designs interchangeable.
+The public M5 release \citep{m5data} supplies recorded sales, calendar, and prices. Item identifiers are sorted by SHA-256 of a fixed salt, a null byte, and the identifier. The first 1,829 items define development, the next 610 the consumed guardian, and the last 610 the external test; all stores for an item stay together. Shared calendar/store shocks remain possible. For mechanical censoring, initialize the availability state to mean sales on the first 56 days, leave those days uncensored, and then update it using preceding observed sales before applying equation~\eqref{eq:censor}. Warmup availability is $\max(Y,1)$; the artificial flag means $Y>C$.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Original archived study: origin-purged development targets. Here shadow denotes the archived later evaluation window, without recalibration. These are not the primary paired-refit training/calibration windows. Guardian readout uses the archived A/B/shadow dates without recalibration.}
+\label{tab:chronology}
+\begin{tabular}{lrr}\toprule
+Role & Retained days & Days\\\midrule
+Point fit / point selection & 365--1313 / 1317--1433 & 949 / 117\\
+Risk fitting & 1436--1553 & 118\\
+Calibration A / B & 1555--1673 / 1674--1793 & 119 / 120\\
+Point / selective shadow & 1794--1913 / 1800--1913 & 120 / 114\\
+\bottomrule\end{tabular}
+\end{table}
+Target-date calendar and price schedules are assumed known at issue time. In the archived selector design, both learners use minimum leaf size 100, four threads, no early stopping, and seeds 20260906--20260908; L2 penalties are 2 for point forecasts and 3 for risk heads. Point controls share sampled rows/features, except that the uncensored-only control removes censored rows.
+
+The 21 risk inputs summarize fixed forecasts, observed error history, horizons, observed sales/censoring, seasonal lags, and category/store identifiers. The full list and observed-error recursion are in \texttt{docs/supervised\_controls.tex}; future-observation perturbations test origin validity.
+
+The supervised selectors retain the original $(2,2)$ adapter, while the likelihood extension uses plain L1. The original and expanded adapter grids and secondary controls are listed in \texttt{docs/supervised\_controls.tex}.
+
+The numerical supplement retains the nine point-model controls, seed variability, and all empirical threshold frontiers. Searches use common A/B thresholds, retain ties, and reject zero demand denominators. The initial freeze uses the first coverage maximizer; the later objective audit uses the largest. Missing thresholds imply all-false masks. Development item intervals use 3,000 draws and hold fits fixed; a separate 17-origin bootstrap probes temporal dependence.
+\subsection{The single frozen guardian comparison}
+\label{app:heldout}\label{app:revision}
+Before its one-time access, the first item-holdout comparison fixed 19 source/model objects, seven scores, two threshold modes, three seeds, the $(2,2)$ adapter, cap 0.640129832706689, and the first-seed contrast. The 610 items comprise 283 Foods, 121 Hobbies, and 206 Household, each in ten stores. Observed histories form origin-valid features; evaluated labels span the A/B and later windows in Table~\ref{tab:chronology}. No learner or threshold is refitted. The original requirement demanded simultaneous risk and coverage checks across groups and periods; the comparison measures policy differences even when those operating checks fail. Machine-readable freeze and access records preserve exact timestamps, hashes, software versions, and development replay checks.
+
+The primary uncertainty family has two pooled methods, three periods, four strata, and two endpoints: 48 bounds. Each tail receives $0.05/48$ with 10,000 item-bootstrap draws at seed 20260906. These approximate bootstrap bounds are not exact concentration guarantees. The prespecified direct-minus-two-head shadow row-coverage contrast has a separate paired 95\% interval. Demand/WAPE contrasts are secondary summaries.
+
+\begin{figure}[t]
+\centering\includegraphics[width=\linewidth]{figures/guardian_groups.png}
+\caption{Previously held-out items, first prespecified seed and frozen pooled thresholds. Dots are shadow WAPE; whiskers extend to the one-sided bootstrap upper bound at nominal tail probability $0.05/48$. Hobbies and Household fail the cap even at their point estimates. All displayed adjusted upper bounds exceed the cap.}
+\label{fig:guardiangroups}
+\end{figure}
+\input{tables/guardian_bounds_compact_review4.tex}
+Across all four strata, coverage lower bounds range from 0.8040 to 0.9288 and WAPE upper bounds from 0.6704 to 0.9468. Thus every WAPE endpoint misses the cap, including Foods; this is a failure of the specified joint check, not merely the pooled rows in Table~\ref{tab:m5guardianbounds}.
+A truncated derived cache was restored from unchanged models; readable arrays matched exactly, and saved masks reproduce all 504 policy/period/stratum records. Frozen results and hashes are unchanged. Subsequent objective, floor, capacity, loss, and partial-label diagnostics reuse this consumed holdout and remain exploratory.
+
+\subsection{The separately frozen external comparison}
+\label{app:external}
+At 14:29 UTC on 6 September 2026, an initial pending plan froze direct excess versus demand-normalized error with floor 0.25. At 14:47 UTC, after inspecting the consumed first-holdout mixed-utility diagnostics, we replaced that pair with composed excess ($\lambda=1$) versus mixed utility ($\lambda=0.25$). No external data had been accessed under either plan. The earlier plan is preserved byte for byte; the final plan records its hash and replacement reason. The first external access was at 15:10 UTC and evaluation completed at 15:13 UTC. This is a prospectively fixed external comparison selected after first-holdout exploration, not a test independently specified before that exploration.
+
+The final plan fixes 27 dependencies, seed 20260906, the point forecast, 220-tree heads, and development thresholds and scale. No external fit, threshold search, or scale update occurred. Exact values, timestamps, and hash-linked plan history are supplied in the reproduction package.
+
+The 610 external items (269 Foods, 117 Hobbies, 224 Household) yield 140,300 primary rows on days 1919--1941, with every forecast origin after day 1913. Observed history through day 1913 and subsequent observations available at each origin form the features; truth is used only for evaluation. Targets 1914--1918, issued at origin 1911, enter only a prespecified 28-day descriptive sensitivity. Paired item-bootstrap draws (10,000; seed 20260906) test mixed-minus-row demand gain and row loss with one-sided 97.5\% bounds. Both must exclude zero in the specified direction. Separately, two policies, three periods (1919--1941, 1919--1929, 1930--1941), four strata, and two bounds give 48 secondary endpoints, each at tail level $0.05/48$. The primary and secondary families each use nominal 0.05; they do not form one joint 95\% claim. Item resampling retains stores and dates but not shared-shock uncertainty. Because the first holdout failed its operating requirements, this test separately asks whether the fixed coverage contrast transfers and whether the operating constraints hold.
+
+\input{tables/external_main.tex}
+\label{sec:external}\label{sec:heldout}
+Mixed utility gains 5.16 demand-coverage points and loses 3.35 case points (Table~\ref{tab:external}); both prespecified directional bounds exclude zero. This confirms transfer of the selected contrast, not of the later paired-refit or five-rule menu procedures. Pooled point risks pass, but all 24 adjusted risk upper bounds exceed the cap; all 24 case-coverage lower bounds pass. Hobbies and Household violate the cap at their point estimates. The union remains point-feasible, so this external result establishes neither binding budget competition nor Pareto optimality.
+
+\input{tables/external_bounds.tex}
+The full-28-day sensitivity has row/demand coverage 86.14\%/82.87\% for $\lambda=1$ and 82.51\%/87.94\% for $\lambda=0.25$, with WAPE 0.6128/0.6133. It is descriptive only. The archived execution has one opening, zero fits, and zero threshold searches; saved item-level accepted counts, error sums, and demand sums reproduce the primary bounds and all 48 secondary endpoints.
+
+\paragraph{Descriptive external budget accounting.}
+We apply equation~\eqref{eq:budget} retrospectively to the same saved masks (Table~\ref{tab:externalbudget}). Row-only and mixed-only sets spend 30.20\% and 29.45\% of common slack, yet contain 3.32\% and 8.48\% of demand. Both retain slack; the joint operating failure remains. This adds no confirmatory endpoint, fit, threshold, or policy; the superseded pair is not evaluated.
+\input{tables/external_budget.tex}
+
+\subsection{Retained historical controls and reproduction}
+\label{app:history}\label{app:legacyselection}
+The numerical supplement retains the earlier weak-forecast controls and all seed/category/period reports. The prior FreshRetailNet check used observable evaluation labels, not hidden stockout demand: shadow row coverage/WAPE 0.28163/0.30484 missed both 0.30 targets, with adjusted bounds 0.25713/0.31821. Calibration B's coverage lower bound was 0.28498. This failed check supplies no natural-stockout confirmation.
+
+The notebook checks frozen hashes before and after replaying theory, moments, and external sufficient statistics. All verification output goes to a separate directory. Experiment scripts regenerate fits from public M5. The separate numerical assets include the derived development inputs needed for the new predictor-specific selector replay; original external replay uses retained sufficient statistics.
+
+\section{Objective choice and supervised-head diagnostics}
+\label{app:objective}
+\input{tables/twohead_table.tex}
+\input{tables/objective_table.tex}
+\subsection{Architecture controls and first-holdout detail}
+\label{app:architecture}
+\input{architecture_diagnostics.tex}
+
+\subsection{Nested paths, family choice, and denominator regularization}
+For a fixed score, $A_t=\{s\leq t\}$ is nested. Both $P(A_t)$ and $\E[Y\ind_{A_t}]/\E Y$, including their empirical blockwise minima, are nondecreasing in $t$. WAPE need not be monotone, but the largest member of any nonempty finite feasible grid maximizes either coverage. An empty grid returns no policy.
+
+Across 27 score/seed pairs (nine rankings, three fits), changing only the coverage objective leaves all thresholds unchanged: 24 finite and three infeasible. Family choice instead selects direct excess for rows and demand normalization for demand. The later audit uses the largest maximizer, changing 1--3 shadow rows in four configurations relative to the original first-maximizer convention; frozen results are preserved.
+
+\texttt{CAP\_REFERENCE.json} reproduces the legacy development-selection WAPE 0.7530939208313988 and the archived cap $r=.85\times.7530939208313988$. Table~\ref{tab:floors} varies the unit-sales denominator regularizer without guardian-based selection. Demand normalization wins the family comparison at floor 0.25; the smaller-floor reversals limit any claim about estimated $e/\mu$.
+\input{tables/floor_sensitivity_compact_review5.tex}
+
+\subsection{Mixed utility and the zero-floor comparison}
+\label{app:mixed}
+For a nonbinding row floor, $w_\lambda=\lambda+(1-\lambda)\mu/T$ defines a probability measure since $\E w_\lambda=1$. At fixed $U_\lambda=\E[aw_\lambda]$, the exchange proof orders $m_r/w_\lambda$ and minimizes excess. Largest feasible weighted prefixes maximize that utility; boundary randomization handles ties. At $\lambda=0$, reject $\mu=0,e>0$ without losing utility; zero-error/zero-demand contexts are neutral. With a binding row floor, a finite-policy LP has Lagrangian coefficient $w_\lambda+\zeta-\tau m_r$, $\zeta\geq0$. If $\tau>0$, its score is $m_r/(w_\lambda+\zeta)$, with $\zeta(c-c_0)=0$. Thus the simple score alone need not solve a binding-floor problem.
+
+The exploratory grid uses first-seed 220-tree heads, zero-clipping, and development A/B mean demand $\hat T$. A/B outcomes alone select thresholds. All five guardian policies are reported; each fails period-B pooled WAPE. At $\lambda=0$, positive-error/zero-demand rows rank last and $0/0$ is zero. The mixed $\lambda=0.25$ point exceeds $\lambda=0$ in both coverages; imperfect fitted heads permit this empirical dominance.
+\input{tables/mixed_utility_table.tex}
+\input{tables/mixed_utility_development.tex}
+Without a positive floor, forecast-normalized guardian row/demand coverage is 44.62\%/87.77\% (WAPE 0.6195), versus demand-normalized 62.74\%/87.53\% (0.6186). The latter masks equal the $\lambda=0$ endpoint, as required by their affine score relationship.
+
+\subsection{Error-head bottleneck and finite-capacity effects}
+\input{tables/partial_oracle_table.tex}
+The outcome-substitution diagnostic (Table~\ref{tab:partialoracles}) localizes a samplewise error-information gap. Positive-error/zero-demand rows rank last; zero-error/zero-demand rows cost no excess. Realized-label access includes irreducible noise and is not a conditional-learning guarantee.
+
+Three 220-tree error-head interventions hold the point forecast and demand head fixed. Two Hobbies specialists share 107,384 rows from the original sample; their 21-versus-29-feature contrast holds the training population fixed. A new shared 29-feature head uses exactly the original 600,000 rows, resolving sample-size confounding for feature addition relative to the shared 21-feature head. Added features are positive-day count, positive-size mean/CV$^2$, and recency over 56/112 days ending at the origin. Protocols precede fitting; shared sample indices, the Hobbies subset, and original forecasts reproduce bit for bit. Future perturbations leave features unchanged. The shared 29-feature head improves both reported MSEs but yields no feasible A/B threshold or later-block prefix (Table~\ref{tab:hobbies_intervention}). Training still uses pre-censoring error labels; no new head is evaluated on either holdout. No matched Hobbies point-forecast intervention is available, so attribution to the point model remains unresolved.
+\input{tables/shared_error_intervention.tex}
+Capacity controls show that enlarging only the error head lowers held-out row coverage by 0.45--0.63 points, whereas enlarging only demand raises it by 0.20--0.38 points and raises WAPE. Both heads together increase excess MSE from 1.0630 to 1.0868. The numerical supplement retains all 288 error/demand/cross-moment decompositions.
+
+\subsection{Demand-head loss controls}
+Squared, Poisson, and Tweedie losses target the conditional mean under their respective moment assumptions; the supplement gives the derivatives. Six matched 220-tree Poisson/Tweedie ($p=1.5$) demand heads improve held-out demand coverage, but period-B WAPE remains 0.6470/0.6467. Full seed results are archived.
+
+\subsection{Group-budget control in a fixed learned-score class}
+\label{app:grouplp}
+For each category, predicted error and demand from the first-seed 220-tree heads define an $8\times8$ quantile grid using development A/B scores only. Bin probabilities $z_j\in[0,1]$ are shared across both blocks. The LP maximizes minimum block row coverage, enforcing $\sum_j z_j(E_{gjb}-rM_{gjb})\leq0$ and $\sum_jz_jN_{gjb}\geq0.35N_{gb}$ separately for each group $g$ and block $b$. No category borrows another's budget. Calibration outcomes determine the probabilities; bins, coefficients, and probabilities are fixed before application to the consumed guardian. These are exploratory point constraints, not independent calibration bounds.
+
+All 28 occupied Hobbies bins in A and 29 in B have positive excess. Their minimum WAPE is 0.7289866 and 0.7503685, respectively, so every nonempty fractional mixture has WAPE above the cap in either block. At the row floor, a dual certificate bounds the minimum worst-block mean excess below by 0.0142589987 units per original row. The supplement supplies coefficients and a verifier checking residual-corrected dual bounds. This infeasibility concerns the specified grid, not arbitrary features or acceptance rules.
+
+Foods and Household attain minimum calibration row coverage 94.60\% and 76.76\%. Their transferred guardian B WAPE is 0.6392 and 0.6459; shadow WAPE is 0.6111 and 0.6455. Thus the group constraints expose Hobbies failure and retain Household transfer failure. Fractional metrics are ratios of expected accepted sums; a realized randomized deployment can fluctuate around them.
+
+\section{Observed-sales and capacity likelihood controls}
+\label{app:observable}
+\input{tables/nb_fine_grid.tex}
+\subsection{Observation model and available information}
+This development-only experiment keeps the plain observed-sales L1 forecast fixed; forecast choice and the cap inherit outcome-informed development history. The strict benchmark flag $\Delta=\ind\{Y>C\}$ differs from the observable capacity hit $H=\ind\{S\geq C\}$, which reveals only $Y\geq C$. The capacity branch uses $H$ in both responses and historical features. Each fit samples 600,000 risk rows from days 1436--1532, validates on 1534--1553, and uses 34 origin-valid inputs, 220 trees, 31 leaves, and the common training settings. Three seeds are retained; shape selection uses observed-data validation likelihood.
+
+Let $p_\theta(y\mid X)$ be Poisson with mean $\mu_\theta$, or NB with mean $\mu_\theta$ and fixed shape $\kappa$ (variance $\mu_\theta+\mu_\theta^2/\kappa$). The two negative log likelihoods are
+\begin{align*}
+ \ell_\Delta&=-(1-\Delta)\log p_\theta(S\mid X)-\Delta\log\Pr_\theta(Y>C\mid X),\\
+ \ell_H&=-(1-H)\log p_\theta(S\mid X)-H\log\Pr_\theta(Y\geq C\mid X).
+\end{align*}
+For integer counts, the latter survival is evaluated at $C-1$. These likelihoods require an appropriate conditional count family and ignorable censoring given modeled information. Dependence of capacity on past sales does not automatically justify ignorability for a finite feature vector. The method therefore models the hidden tail; it does not nonparametrically identify it.
+
+\subsection{Implied moments, thresholding, and results}
+For $k=\lfloor f\rfloor$ and nonnegative $f$, the distribution implies
+\[
+ \hat e=\E_\theta|Y-f|=\hat\mu-f+2\{fF_\theta(k)-\E_\theta[Y\ind\{Y\leq k\}]\}.
+\]
+The truncated moment is $\hat\mu F_{\operatorname{Pois}(\hat\mu)}(k-1)$ for Poisson and $\hat\mu F_{\operatorname{NB}(\kappa+1,p)}(k-1)$ for NB, with $p=\kappa/(\kappa+\hat\mu)$. Direct summation and finite differences check moments and likelihood derivatives, including extreme tails.
+
+A/B thresholds maximize common row coverage under $\sum a\hat e/\sum a\hat\mu\leq r$ and the 0.35 floor. Both excess and demand-normalized rankings are archived. Implied and realized risk differ through
+\[
+ R(a)-r=\frac{\E[a(\hat e-r\hat\mu)]+\E[a(e-\hat e)]-r\E[a(\mu-\hat\mu)]}{\E[a\mu]}.
+\]
+Hence passing the implied constraint is not an observed-risk certificate. Table~\ref{tab:observablemoments} reports both numerator/denominator pairs.
+
+\input{tables/observable_moment_table.tex}
+Across three fits per observation branch, validation selects $\kappa=2$; Hobbies WAPE remains 0.8018. All 33 retained fits and seven derivative, moment, origin, and equality tests are archived.
+
+\FloatBarrier
+\subsection{Fine dispersion grid and identical-forecast comparison}
+All fine-grid fits share the sample, features, and forecast; protocols and hashes precede fitting. The count-matched supervised head uses the same inputs and a realized-excess target. Outcome-independent boundary draws agree with fractional-tie expectations (264 records and 21 count matches verified). Uniform fractional abstention at 48.17\% instead has equal demand coverage and WAPE 0.6790.
+
+\paragraph{Validation likelihood uncertainty.}
+All seven observed NLL means reproduce exactly. The 10,000 paired-bootstrap draws resample 1,829 validation items (365,800 rows), retaining each item's stores and dates. The four adjusted comparisons use two-sided tails $0.05/(2\times4)$; pointwise 95\% intervals are all positive. These approximate intervals reuse the data that selected shape 2 and condition on fitted models; they neither confirm the selected winner independently nor identify censored tails. Shared store/calendar shocks remain unaccounted for. Saved item sums reproduce all intervals without fitting.
+
+\input{natural_diagnostics.tex}

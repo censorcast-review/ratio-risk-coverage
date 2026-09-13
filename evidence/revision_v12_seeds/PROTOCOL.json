@@ -1,0 +1,55 @@
+{
+  "version": "A-v12-1",
+  "utc": "2026-09-12T09:26:23.092818+00:00",
+  "scope": "Two newly fixed seeds on previously evaluated M5; not untouched-data confirmation",
+  "reference_seed": 20260910,
+  "additional_seeds": [
+    20260913,
+    20260914
+  ],
+  "fit_calls_per_seed": 10,
+  "fit_total": 20,
+  "bootstrap_seed": 20260910,
+  "bootstrap_draws": 2000,
+  "primary": "Eq6, relative cap .95 times max full A/B risk per arm, floor .35, all8arm/headcells",
+  "head_pairs": [
+    [
+      220,
+      220
+    ],
+    [
+      660,
+      220
+    ],
+    [
+      220,
+      660
+    ],
+    [
+      660,
+      660
+    ]
+  ],
+  "sampling": "Same original600krowdrawpipeline; withinseedpairedacrossarms",
+  "runtime_required": {
+    "lightgbm": "4.7.0",
+    "xgboost": "3.4.1",
+    "numpy": "2.3.5"
+  },
+  "input_sha256": {
+    "calendar.csv": "d12b5914ef03e66649adf5dd9e996e6602251c22b7a6af8f1f7e3aa12f8860f5",
+    "design_outcomes_v0_5.npz": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "sell_prices.csv": "9da3ad1f8b8ccacdbdc70612191dd375ec24a4ac6625c24b75b3bc60b0bed2ef"
+  },
+  "code_sha256": {
+    "code/run_paired_seed_v12.py": "91a409431e3ae490ecfe48f9ceabedec87cfb6a767b851f1b01d6ce8b9a5fcb3",
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "forecast_archive/code/replay_m5.py": "07056531a52556481aafc9a8ae712ccd1d328dbb96e2a26a870b829a363cea5e",
+    "forecast_archive/code/m5/legacy_features/features.py": "3b2bd1cc61b1d5108fa21b0cca13fc8e17fad9014d878ba8ab461f3648adee41"
+  },
+  "reporting": "Perseedpairedcontrast,selectedfamilies,feasibility,caps;meanandsampleSDacross3seedssecondary;originalandadditionalresultsdistinguished",
+  "success": "Report direction of dc<0anddd>0for each prespecified cell; donotdropfailed/infeasiblecells; nothypothesistestingacross3seeds",
+  "failure_policy": "No replacement seeds, no retuning; preserve failure logs and disclose implementation-only repairs",
+  "later_access": "Alreadyconsumed; eachseedpolicieswrittenbeforeitsnewLaterprediction",
+  "source_protocol_sha256": "a9e3f8283cd0d23dc86796f1eeaa745e52bd811711e3526d20d8284481f6217c"
+}

@@ -1,0 +1,14 @@
+\begin{table}[H]
+\centering\small
+\caption{New retrospective comparison on the same 2,085,060 M5 development evaluation rows. Each predictor has a newly fitted error head; all share a newly fitted demand head, head-training rows, cap, and calibration dates. Higher coverage is better; lower WAPE is better. Full WAPE uses every row. These are fitted-policy outcomes, not population optima or a new external test.}
+\label{tab:accuracy-selection}
+\begin{tabular}{lrrrrr}\toprule
+Predictor & Full WAPE & $\lambda$ & Rows (\%) & Demand (\%) & Accepted WAPE\\\midrule
+Group-scaled L1 & 0.67139 & 1 & 85.90 & 80.59 & 0.63272 \\
+Group-scaled L1 & 0.67139 & 0.25 & 80.13 & 86.06 & 0.63039 \\
+Residual L1 & 0.65956 & 1 & 89.50 & 83.85 & 0.63298 \\
+Residual L1 & 0.65956 & 0.25 & 86.48 & 89.72 & 0.63116 \\
+Chronos-2 (raw) & 0.68310 & 1 & 80.74 & 75.42 & 0.63568 \\
+Chronos-2 (raw) & 0.68310 & 0.25 & 75.39 & 81.82 & 0.63007 \\
+\bottomrule\end{tabular}
+\end{table}

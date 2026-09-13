@@ -1,0 +1,44 @@
+{
+  "status": "FROZEN_BEFORE_CAPACITY_HIT_FITS",
+  "scope": "POST_HOC_CONSUMED_DESIGN_ONLY",
+  "motivation": "Distinguish simulation strict exceedance flag from operationally observable capacity hit",
+  "parent_protocol_sha256": "283864fc1877f8e8f9d3f8621325b3257e76d6226a1a04c13fdd28e21849537a",
+  "data_sha256": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+  "source_hashes": {
+    "run_capacity_hit_extension.py": "71836fb765e126354290181eafdda5d0acabd2eea8c0ca81d24bb25a6cda7ac8",
+    "run_observable_extension.py": "d6a56fc06084d0ef5319ac7fa2f0712702fbb78642fcf4319138897e1f53067b",
+    "r3_observable.py": "78b7109fb8afdba1a8ff4e9d1514a2d7ed573af02b3d0dab4b4def3b352f0a22"
+  },
+  "methods": [
+    [
+      "capacity_hit_poisson",
+      null
+    ],
+    [
+      "capacity_hit_nb_0p5",
+      0.5
+    ],
+    [
+      "capacity_hit_nb_2",
+      2.0
+    ],
+    [
+      "capacity_hit_nb_10",
+      10.0
+    ]
+  ],
+  "seeds": [
+    20260906,
+    20260907,
+    20260908
+  ],
+  "trees": 220,
+  "rows_per_seed": 600000,
+  "censor_rule": "hit = S >= C; uncensored term pmf(S), censored term Pr(Y>=C)=sf(C-1)",
+  "historical_feature_rule": "Replace columns 28/29 by strictly prior mean(S>=C) over 7/28 days; no benchmark strict flag is used by this branch",
+  "dispersion_selection": "minimum censored validation NLL using S and C, not hidden Y",
+  "cap": 0.640129832706689,
+  "row_floor": 0.35,
+  "fresh_guardian_opened": false,
+  "external_opened": false
+}

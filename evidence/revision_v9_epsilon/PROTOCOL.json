@@ -1,0 +1,35 @@
+{
+  "utc": "2026-09-12T07:43:09.643314+00:00",
+  "analysis": "Exact epsilon acceptance intervals for Ratio under Eq. (7)",
+  "status": "Retrospective extension informed by the v8 review; not prospective preregistration.",
+  "scope": "Four complete-sales frozen point menus at the original relative cap .95 and the existing 200 redesigned calibration menus for complete 220/220 and Bike.",
+  "epsilon_units": "Coverage fraction in computation; percentage points in all endpoint reports.",
+  "priority": "Eligible candidates within epsilon of maximum minimum-window exposure coverage; maximize minimum-window case coverage, then exposure coverage, then METHODS order.",
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "ratio_method": "demand",
+  "existing_comparison_tolerance": 1e-12,
+  "formula": "Let g_j = max_i d_i - d_j on eligible candidates and K_j=(c_j,d_j,-j). Ratio is chosen exactly on [g_R, min_{j:K_j>K_R} g_j), intersected with epsilon>=0. An ineligible Ratio or lower>=upper gives the empty set; no outranking candidate gives an infinite upper endpoint. Lower closed, upper open.",
+  "numerical_reporting": "Mathematical intervals use exact rational representations of stored binary64 utilities. Existing selector tolerance shifts positive activation boundaries downward by at most 1e-10 percentage points; do not imply greater scientific measurement precision from the exact stored arithmetic.",
+  "draw_summary": "For each existing draw report empty/nonempty interval, both finite endpoints, limiting competitor, and membership at .5 pp. Report empirical quantiles (min, 2.5%, 25%, median, 75%, 97.5%, max) of nonempty lower and finite upper endpoints; no confidence or population interpretation. No joint four-cell draw interval is available because only reference complete heads were resampled.",
+  "validation": "Reconstruct existing draw utilities and eligibility from raw sufficient statistics, check archived arrays; enumerate all activation breakpoints with rational arithmetic and independently replay the original floating selector below/at/above every activation (interior probes separated by 1e-8 percentage points). Explicitly validate endpoint inclusions.",
+  "model_fits": 0,
+  "threshold_fits": 0,
+  "new_draws": 0,
+  "evaluation_array_reads": 0,
+  "code_sha256": "e0c6379e5f23e0235d053dc8fe92dc1b6ad5ee70c5a694413a70ac9ec8ce818d",
+  "input_sha256": {
+    "code/run_tolerance_v8.py": "986e00b8ba2080c93e95919931bc873ad072886fa2b7e951c617e81be6013195",
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "evidence/matched_censoring/complete/FROZEN.json": "18db9c914420f151224e070ea83b91d73b1cd9ec6b0a60b8caa409ae7cf561cb",
+    "evidence/revision_v7_stability/complete_220_220/POINT.json": "fa8906dc3cc4250554d5ccbb6ebef10ae7010fb2fd5eaa712c32dea994c90482",
+    "evidence/revision_v7_stability/complete_220_220/FULL_DRAWS.npz": "5743d75c87509f2533c2fa08d9aafa410e21a955f9c4cba4a3d02a61c6a101d8",
+    "evidence/revision_v7_stability/bike/POINT.json": "e5ec76b86f5f185e05f35eda55422581a2d75ded4ecb0464e0a678764d710508",
+    "evidence/revision_v7_stability/bike/FULL_DRAWS.npz": "cb78c91b4a22ae2d473a31452284bb6283dd8f5c1d75ddf2d84dd2c9b40522a6"
+  }
+}

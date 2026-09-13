@@ -1,0 +1,40 @@
+\subsection{Fixed row coverage and exposure-weighted coverage}
+% Show the moved Proposition 1 without disturbing subsequent numbering.
+\begingroup
+\renewcommand{\theproposition}{1}
+\renewcommand{\theHproposition}{threshold}
+\begin{proposition}[Fixed-coverage threshold principle]
+\label{prop:threshold}
+Assume $\E|L-rW|<\infty$. Among rules with $\E a=c$, accepting
+the smallest $m_r=\E[L-rW\mid X]$ values minimizes expected excess.
+Boundary randomization resolves atoms. The minimum excess is
+$\int_0^cQ_m(u)\,du$, where $Q_m$ is the quantile function of $m_r$.
+A ratio-risk assertion additionally requires positive accepted exposure.
+\end{proposition}
+\endgroup
+\addtocounter{proposition}{-1}
+Choose $t$ with $\Pr(m_r<t)\leq c\leq\Pr(m_r\leq t)$, and let
+$a^*$ accept below $t$, reject above it, and randomize on the tie
+to attain $c$. For any other rule of the same coverage,
+\[
+ (a-a^*)(m_r-t)\geq0,\qquad
+ \E[a(L-rW)]-\E[a^*(L-rW)]
+ =\E[(a-a^*)(m_r-t)]\geq0.
+\]
+This proves the threshold rule and the lower-quantile expression.
+The limiting rules cover $c=0,1$. This minimizes excess, not the
+ratio itself at fixed row coverage, because accepted exposure can vary.
+
+For Proposition~\ref{prop:weighted}, $w=0$ implies $W=0$ almost
+surely conditionally. These contexts add no exposure: reject them
+if $\ell>0$; otherwise they are neutral. On $\{w>0\}$, set
+$d\nu=w\,dP_X/T$ and $\xi=\ell/w$. Then
+\[
+ \E[aW]=T\E_\nu a,\qquad \E[aL]=T\E_\nu[a\xi].
+\]
+The exchange argument under $\nu$ minimizes the numerator at fixed
+exposure coverage by ordering $\xi$. Maximizing feasible exposure
+coverage thus admits an $\ell/w$ threshold when a positive-exposure
+feasible rule exists. An additional binding row floor can change
+that optimizer. Randomization handles atoms; the ranking is
+independent of $r$, while the selected threshold depends on $r$.

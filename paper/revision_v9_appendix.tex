@@ -1,0 +1,56 @@
+\FloatBarrier
+\section{Utility tolerance, case floors, and exchange uncertainty}
+\label{app:v8}
+These additional analyses are retrospective and use the existing paired fits, frozen candidate scores and previously evaluated periods. Their specifications, input hashes and code hashes were recorded before the new computations. The scientific choices were informed by earlier results and review; this chronology is not prospective preregistration. No new models or external data were introduced. All grid settings and no-choice conditions are retained in the accompanying source, under \texttt{evidence/revision\_v8\_*} and \texttt{evidence/revision\_v9\_*}.
+
+\subsection{Conditional uncertainty of the observed exchanges}
+\label{app:v8-exchange}
+For every original relative-.95 policy, define $Q=\Delta d/(-\Delta c)$ from exposure-choice minus case-choice coverage. We use 4,000 item-cluster draws (seed 20260915), sharing multiplicities across arms and head cells and retaining each item's stores and dates. Every case-loss denominator is positive; the smallest is 13.5332 points. Tables~\ref{tab:v8-exchange} and \ref{tab:v8-exchange-difference} report all ratios and complete-minus-censored differences, with central 95\% and four-contrast-adjusted percentile summaries.
+\input{revision_v8_exchange_table.tex}
+\input{revision_v8_exchange_difference_table.tex}
+All four matched-head point differences and adjusted intervals are positive at their respective arm-relative caps; this is not a causal efficiency comparison. The complete 220/220 Ratio branch has $Q=.615044$ [.482931,.777873]. Substituting its existing Descending candidate while retaining Excess gives -35.1632 case/+10.0836 exposure points and $Q=.286766$ [.218574,.368456]. This is a fixed-candidate comparison. These intervals condition on fitted models, caps, thresholds and choices; they omit calibration reselection and common store/calendar shocks. No selection-inclusive exchange distribution or bimodality has been established.
+
+\subsection{Margins at stricter relative caps}
+\label{app:v8-strict}
+All 30 calibration candidates at relative caps .85/.90/.95 are reconstructed for both 220/220 arms. At .85/.90, Descending is infeasible in both arms, so its Ratio margin is undefined. Complete-sales Ratio exceeds feasible runner-up Mixed by 4.0141/3.4327 pp. Censored .85 selects Mixed with Ratio infeasible; .90 selects Ratio by 2.5829 pp (Table~\ref{tab:v8-strict}). Complete .85 Ratio has minimum case coverage 35.0362\%, close to the .35 floor. These finite-menu observations do not isolate error-head value or establish robustness to a stricter floor.
+\input{revision_v8_strict_cap_table.tex}
+
+\FloatBarrier
+\subsection{Exposure allowances: alternatives and exact selection intervals}
+\label{app:v8-tolerance}
+Equation~\eqref{eq:menu-choice} remains the primary audit rule. Equation~\eqref{eq:tolerance} is a retrospective alternative: it changes utility, retaining the original thresholds, eligibility and case choice. The illustrative .5 pp allowance and grid $\{0,.1,.25,.5,1\}$ pp were recorded before the v8 computation, informed by the earlier audit. All 40 choices were frozen before evaluation; the allowance is neither an operational recommendation nor a confidence threshold. Tables~\ref{tab:v8-tolerance-grid}--\ref{tab:v8-tolerance-frequency} retain the complete grid, eight-cell results and frequencies.
+\begin{figure}[t]\centering
+\includegraphics[width=\linewidth]{revision_v8_neartie.pdf}
+\caption{Complete-sales 220/220 calibration candidates; Error is infeasible. Minimum case and exposure coverage are taken separately over A/B. The right panel magnifies the exposure axis. Shading marks the illustrative .5-point utility allowance, clipped by the zoom; it is not a confidence interval. Ratio and Descending are close in exposure but far apart in cases.}\label{fig:near-tie}
+\end{figure}
+\input{revision_v8_tolerance_grid.tex}
+\input{revision_v8_tolerance_table.tex}
+
+Table~\ref{tab:v8-tolerance} compares the alternative with both the unchanged case choice and the original exposure choice. One evaluation exposure cost is .6208 pp, exceeding .5; the allowance only bounds the calibration concession.
+
+\paragraph{Analytic intervals.}
+For an eligible Ratio candidate $R$, let $D=\max_j\bar d_j$ and $P_j=(\bar c_j,\bar d_j,-j)$, where $j$ is the fixed tie order. Its exact selection interval is
+\[
+ [L_R,U_R)=\left[D-\bar d_R,\;\min_{j:P_j>_{\rm lex}P_R}(D-\bar d_j)\right).
+\]
+The upper bound is infinite if there is no higher-priority candidate; the interval is empty if $U_R\leq L_R$ or Ratio is ineligible. The lower bound admits Ratio; the upper bound admits a candidate that defeats it. We check \emph{all} eligible competitors, not just Descending.
+
+For complete-sales 220/220, 660/220, 220/660 and 660/660, the intervals are approximately [0,1.634053), [.388433,2.508229), [.093843,1.646188) and [.360002,2.252009) pp. Mixed supplies every upper endpoint. Their intersection is approximately [.388433,1.634053), containing the conservatively rounded [.39,1.63] pp interval. Thus .5 is not an isolated grid value, but this descriptive interval does not justify selecting a utility from the desired family.
+
+The same 200 complete-reference redesign draws all have nonempty Ratio intervals. Lower-endpoint empirical 2.5/50/97.5 percentiles are 0/0/.479234 pp; upper-endpoint percentiles are .596676/1.643270/3.088298 pp. Exactly 194 contain .5. Bike has 192 nonempty intervals and eight empty ones because Mixed already dominates when Ratio becomes eligible. Nonempty lower endpoints are zero, and upper percentiles are .188918/1.436880/3.550370 pp; .5 belongs to 172 of \emph{all} 200 intervals. These are conditional descriptive endpoint distributions, not confidence bounds. No four-head joint redesign distribution exists in the archive.
+\input{revision_v8_tolerance_frequency.tex}
+The source retains all draw intervals and candidate records under \texttt{evidence/revision\_v9\_epsilon/}. Exact-rational breakpoint checks and independent floating-point replay validate the intervals. The implementation's $10^{-12}$ coverage-fraction comparison tolerance moves positive boundaries by only $10^{-10}$ pp. No new fits, threshold searches, resampling draws or evaluation outcomes enter this interval analysis.
+
+\FloatBarrier
+\subsection{A-design screening, floors, and exposure allowances}
+\label{app:v8-floor}
+The floor audit uses .35/.40/.45, four head pairs and five rankings (60 conditions), with reporting/design caps .6326834234/.6010492522 and fitted arrays fixed. Largest feasible whole-tie A thresholds are screened on B using 4,000 item resamples (seed 20260912), at tails .05/60 and .05/20. All 40 nonempty conditions pass (16/12/12 by floor). Exact A utility determines choices before rereading Later data.
+
+Raising the floor either retains the largest risk-feasible threshold or makes its family infeasible; a smaller threshold cannot restore lost case coverage. Descending accepts 35.0483/35.0938\% on A, so even .36 excludes it. Floors .40/.45 select Excess/Ratio throughout, with Later contrasts -26.78 to -16.81 case/+11.59--12.72 exposure points (Table~\ref{tab:v8-floor-main}). Ratio at 220/660 accepts only 45.0574\% on A, limiting extrapolation. The source retains the full 60-condition screen and 24 selected records (48 with both adjustments), including duplicated policies, in \texttt{evidence/revision\_v8\_floor/}; the detailed v8 table files are also retained.
+
+\input{revision_v8_floor_main_table.tex}
+
+\paragraph{Composing the tolerance rule with screening.}
+We now apply the same interval formula to the existing B-passing candidates, using A utility. At floor .35, Descending exceeds Ratio in exposure by 1.083012/1.846934/1.247238/1.597532 pp in the four head settings above. Mixed supplies all upper bounds. The common interval is approximately [1.846934,3.741367) pp: allowances 0/.5/1 retain Descending throughout, whereas 2 selects Ratio throughout. At floors .40/.45, the common Ratio interval is [0,2.494129) pp, so all four tested allowances select Ratio. Both screen-family adjustments agree. All conditions and breakpoint checks are retained in \texttt{evidence/revision\_v9\_screen\_tolerance/}.
+
+The near-tie result for the original joint-A/B design does not extend to this stricter A-only design. Under the illustrative .5 pp allowance, its family switch is caused by the floor restriction; a larger declared concession supplies a different route. This establishes neither a universal allowance nor the causal effect of changing the design cap alone. Selected Later upper summaries remain approximate and fit-conditional: the largest $U_{60}=.62802431<r$, but .05/60 in 4,000 draws leaves only about 3.3 draws in the tail. Union risk and prospective generalization are not evaluated.

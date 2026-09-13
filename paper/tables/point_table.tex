@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering\small
+\caption{Forecasting ablations on the full 120-day M5 design shadow. SD is across three training seeds, not a confidence interval. Earlier forecasts are fixed single-run controls.}
+\label{tab:point}
+\begin{tabular}{lrrr}
+\toprule
+Forecaster & Fits & Mean WAPE & Seed SD\\
+\midrule
+Earlier HistGB Poisson & 1 & 0.72713 & --\\
+Earlier CENSORCAST & 1 & 0.70584 & --\\
+LightGBM Poisson & 3 & 0.72729 & 0.00059\\
+LightGBM L1, uncensored rows & 3 & 0.72866 & 0.00163\\
+LightGBM L1, observed sales & 3 & 0.68225 & 0.00015\\
+L1 + global rescaling & 3 & 0.68122 & 0.00021\\
+L1 + category rescaling & 3 & 0.68110 & 0.00018\\
+L1 + ungated EM correction & 3 & 0.68225 & 0.00015\\
+L1 + censor-gated adapter & 3 & 0.67034 & 0.00009\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,14 @@
+\begin{table}[htbp]\centering\small
+\caption{Budget decomposition for $\lambda=1$ versus $\lambda=0.25$ in the new retrospective comparison. Demand share uses the whole evaluation denominator; excess is absolute-error mass minus $r$ times demand mass. Negative common excess supplies slack.}
+\label{tab:accuracy-budget}
+\begin{tabular}{llrrrrr}\toprule
+Predictor & Set & Rows & Demand (\%) & WAPE & Mean $f$ & Excess\\\midrule
+Group-scaled L1 & Common & 1,594,575 & 77.24 & 0.6169 & 1.018 & -52,237.9 \\
+Group-scaled L1 & Row only & 196,485 & 3.35 & 0.9966 & 0.076 & 34,812.8 \\
+Group-scaled L1 & Mixed only & 76,262 & 8.82 & 0.7481 & 1.988 & 27,784.7 \\
+Residual L1 & Common & 1,730,317 & 81.30 & 0.6218 & 0.977 & -43,525.8 \\
+Residual L1 & Row only & 135,756 & 2.55 & 0.9904 & 0.107 & 26,046.8 \\
+Residual L1 & Mixed only & 72,762 & 8.42 & 0.7217 & 2.208 & 20,039.0 \\
+Chronos-2 (raw) & Common & 1,493,529 & 72.28 & 0.6196 & 0.955 & -43,234.8 \\
+Chronos-2 (raw) & Row only & 190,032 & 3.14 & 1.0049 & 0.070 & 33,442.0 \\
+Chronos-2 (raw) & Mixed only & 78,383 & 9.53 & 0.7092 & 2.115 & 19,221.3 \\\bottomrule\end{tabular}\end{table}

@@ -1,0 +1,103 @@
+{
+  "locked_utc": "2026-09-12T06:29:40.015907+00:00",
+  "scope": "Retrospective calibration resampling sensitivity conditional on existing scores, fitted predictors/heads, reporting cap and T. No evaluation outcomes read. No model fitting. Not new confirmation, population risk control, or true model uncertainty.",
+  "candidate_order": [
+    "error",
+    "row",
+    "mixed",
+    "demand",
+    "weight_descending"
+  ],
+  "m5": {
+    "arm": "complete",
+    "head_pairs": [
+      [
+        220,
+        220
+      ],
+      [
+        660,
+        220
+      ],
+      [
+        220,
+        660
+      ],
+      [
+        660,
+        660
+      ]
+    ],
+    "relative_cap_factor": 0.95,
+    "cap_rule": "Read pre-existing FROZEN cap and keep fixed in every replicate.",
+    "calibration_windows": [
+      [
+        1611,
+        1645
+      ],
+      [
+        1646,
+        1673
+      ]
+    ],
+    "cluster": "item, every store and all 63 calibration days retained; same item multiplicities in A and B",
+    "design_cap_factor": 1.0,
+    "floor": 0.35,
+    "score_scale": "Original policy_audit.scores, including demand denominator w/T",
+    "risk_tolerance_total_excess": 1e-09
+  },
+  "bike": {
+    "variant": "default",
+    "relative_cap_factor": 0.85,
+    "calibration_windows": 1,
+    "cluster": "calendar day, all recorded hours retained; labels read only from dteday field of existing bike.zip and existing SPLITS cal indices",
+    "design_cap_factor": 0.95,
+    "floor": 0.35,
+    "score_scale": "Original nonretail/run.py: demand denominator w; mixed denominator .25+.75*w/T",
+    "risk_tolerance_total_excess": 1e-12
+  },
+  "fixed_candidates": {
+    "draws": 4000,
+    "seed": 20260913,
+    "thresholds": "Fixed to pre-existing FROZEN thresholds. Reevaluate positive mass, row floor and design cap in every calibration window. Choose among eligible frozen candidates. No threshold refit."
+  },
+  "full_procedure": {
+    "draws": 200,
+    "seed": 20260914,
+    "settings": [
+      "complete_220_220",
+      "bike"
+    ],
+    "refit": "Within each bootstrap resample redesign the largest observed whole-tie threshold for all five fixed rankings, then maximize minimum window coverage among feasible candidates. Fits, score values, cap and T remain fixed. Only score ties occurring in the resample are candidate thresholds. Positive infinity allowed only via explicit accept-all.",
+    "risk_rules": "Reuse each dataset original design cap, floor, and explicit accept-all branch.",
+    "draw_count": "Fixed before analysis; do not change in response to outcomes."
+  },
+  "selection": {
+    "objectives": [
+      "c",
+      "d"
+    ],
+    "criterion": "Maximum minimum-window case or exposure coverage; declared method order breaks exact ties.",
+    "no_choice": "All candidates ineligible, reported explicitly."
+  },
+  "outputs": [
+    "Every candidate calibration risk, coverage, eligibility, exact winner/runner-up margins",
+    "Every candidate selection/eligibility frequency, no-choice frequency, winner margin quantiles",
+    "Ratio minus exposure-descending and Ratio minus Mixed utility margin distributions, with joint-eligibility counts",
+    "Full raw replicate arrays and count matrices",
+    "all-one multiplicities reproduce original FROZEN thresholds and choices; weighted toy agrees with literal replicated samples using existing largest_threshold"
+  ],
+  "limitations": "Cluster bootstrap ignores shared store/calendar shocks for M5 and cross-day dependence for Bike. Fixed-candidate screening at boundary can create no-choice frequency. Full-procedure frequencies are descriptive algorithm sensitivity, not probability of a genuinely optimal policy.",
+  "input_sha256": {
+    "code/policy_audit.py": "97cf13730b68b5b1222ead00f7b57d0d8523a61039a27ea388004c230aece96f",
+    "code/run_uncensored_audit.py": "2d449c41143eac1c5d2715e750ceecf9c9aa01ab2927515a09b657203a3851c7",
+    "evidence/nonretail/run.py": "4671ddde2044be41dd1269dda94d93f6d1f0e34a77021fd20c34287e13652760",
+    "evidence/matched_censoring/complete/CALIBRATION.npz": "59e00cd710d4ccf6771327df1349ec19e1ced26afa9be2413641a67d10886dd1",
+    "evidence/matched_censoring/complete/FROZEN.json": "18db9c914420f151224e070ea83b91d73b1cd9ec6b0a60b8caa409ae7cf561cb",
+    "evidence/nonretail/bike/CALIBRATION_default.npz": "477caef4d1c050f2764eca76cc74fd571d181f520dcf7d00887ac1fd494cb8c4",
+    "evidence/nonretail/bike/FROZEN.json": "f12685116e68d209f94da4dce00e441cef0e673739b56357b0fca2857d8dbfad",
+    "evidence/nonretail/bike/SPLITS.npz": "677d37e7559b49451f5d48d9f25638f7d7edbac4a1193efb0e5a5c2db4daa7be",
+    "evidence/nonretail/bike.zip": "b70182d0d0508e9abbb79306ce5c0cec34869000f8220175ac83d11dbe845401",
+    "legacy/results/objectives/cache_design/metadata.npz": "8dbcca81203a23d8c3a1d61fd43d179d5c481e04ee726ca5f2fc40d896ba4fbf"
+  }
+}

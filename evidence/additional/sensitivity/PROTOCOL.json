@@ -1,0 +1,32 @@
+{
+  "time": 1788913402.363157,
+  "script_sha256": "176f67a2f3765052b87cc63b0ebaedb6501b9eb9c4d1d299b5fdc9be8fc5faab",
+  "caps": [
+    0.6,
+    0.62,
+    0.64012983268,
+    0.66,
+    0.68,
+    0.7
+  ],
+  "floors": [
+    0.0,
+    0.35,
+    0.6,
+    0.8
+  ],
+  "methods": [
+    "error",
+    "row",
+    "mixed",
+    "demand"
+  ],
+  "models": [
+    "group_l1",
+    "learned_l1",
+    "chronos2_univariate_raw"
+  ],
+  "scope": "retrospective development only; original saved predictors and heads; no fits or holdout access",
+  "baseline": "Conditional absolute-error regression ranking, following Franc et al. (2023) regression-based uncertainty construction; thresholds recalibrated to WAPE cap, not original selective-risk guarantee",
+  "selection": "largest common feasible whole-tie threshold on calibration A/B; no threshold selection using evaluation outcomes"
+}

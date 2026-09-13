@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-09-09T00:24:45.989809+00:00",
+  "dataset": "Mulan Yeast, official train/test ARFF split",
+  "source": "https://github.com/tsoumakas/mulan/tree/master/data/multi-label/yeast",
+  "seed": 20260909,
+  "classifier": "independent StandardScaler + LogisticRegression(C=1,max_iter=2000), fixed probability threshold 0.5; constant training labels use constant prediction",
+  "train_calibration": "seeded permutation of official training set, first 75 percent for fitting, remaining 25 percent for calibration",
+  "conditional_loss_estimate": "sum over positive predictions of 1 minus fitted probability; no evaluation-label information",
+  "weight": "observed number of positive predictions of fixed classifier",
+  "cap": "0.85 times full-coverage calibration false-positive ratio; sensitivity multipliers 0.75,0.95,1.05 are secondary",
+  "floor": 0.35,
+  "methods": [
+    "conditional_error",
+    "row_excess",
+    "exposure_ratio"
+  ],
+  "selection": "largest whole-tie threshold meeting cap and floor in calibration; reject all if absent",
+  "bootstrap": "2000 paired independent example resamples, seed 20260909; descriptive marginal percentile intervals conditional on fit",
+  "claims": "one fixed dataset/protocol; include cap failures and absent reversals; no retries based on test results",
+  "test_access": "parse official test labels only after classifier and all thresholds are saved"
+}

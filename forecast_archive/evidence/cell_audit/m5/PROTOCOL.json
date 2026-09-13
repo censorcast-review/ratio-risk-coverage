@@ -1,0 +1,30 @@
+{
+  "analysis_type": "post-hoc descriptive audit on previously consumed M5",
+  "comparator_definition": "base_category_scale[category] * raw hierarchy forecast",
+  "created_utc": "2026-09-08T09:57:19.578619+00:00",
+  "fit_calls": 0,
+  "floor": 0.5,
+  "floor_definition": "absolute multiplier on raw hierarchy forecast: max(saved shrunk scale, 0.5) * raw forecast",
+  "input_sha256": {
+    "calendar": "d12b5914ef03e66649adf5dd9e996e6602251c22b7a6af8f1f7e3aa12f8860f5",
+    "category_results": "103eda625123d077f268a8a706237d03a23187fe5707c4cf7e176307550296a4",
+    "design": "5d63b6aff7854ed1811f6b5bffd2f397a09d671c6754e0f1345e2313b35e48fd",
+    "hierarchy_base": "2527c577cb863cbb72c3af6c78509b179aa70543ea5c170f6564449541d34c90",
+    "hit_model": "5b232c67bb3fde0ab28d280857ad09014a4947a947ae3c93da5892b96226a60f",
+    "later_index": "be6dd6653a75da9464de1f429a88fd743c16225771ab11377110f832525c97a1",
+    "old_cells": "fcdd278a8f8ebd7d1ca496be1e7cc3a7ebc9d8c6b7ee986d2244df6cacafc61a",
+    "original_results": "cfaadcbcd4d12f641f2b403de6008e53bb862a199ea0429c95fc36a33ad57fa8",
+    "policy": "bd70d616d5837b559a12579a1ae699cd5448ceaccf2dc88448df986a9c6ac467",
+    "prices": "9da3ad1f8b8ccacdbdc70612191dd375ec24a4ac6625c24b75b3bc60b0bed2ef",
+    "validation": "401fb56baf93b5016b773ee7428c8e89adb105070586fd8507b7b8bf16f61f6a"
+  },
+  "new_holdout_accesses": 0,
+  "no_selection": "exactly one floor (0.5), no grid, no method replacement using Later",
+  "policy_search_calls": 0,
+  "quantile_scope": "pooled over every category and row in point validation; frozen edges applied unchanged",
+  "replay_helper_sha256": "07056531a52556481aafc9a8ae712ccd1d328dbb96e2a26a870b829a363cea5e",
+  "script_sha256": "ea06f6d2c42a7adf2f28dc8e390f9d109a5a5648c34dab46df1c1f570aeb171c",
+  "seed": 20260906,
+  "status": "FIXED_BEFORE_NEW_SCORING",
+  "validation_scope": "entire point-validation set used for final policy refit; in-sample calibration loss"
+}

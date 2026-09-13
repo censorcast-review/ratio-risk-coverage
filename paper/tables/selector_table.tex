@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering\small
+\caption{Matched risk targets with one pooled threshold. Means across three risk seeds on the 114-day design shadow. AUC detects high absolute error. All rows use cap 0.64013 and floor 0.35; zero coverage means no feasible calibration threshold, not a theorem of impossibility.}
+\label{tab:selectors}
+\begin{tabular}{llrrr}
+\toprule
+Forecaster & Score & AUC & Coverage & WAPE\\
+\midrule
+Earlier & Mean absolute error & 0.837 & 0.000 & --\\
+Earlier & Error quantile (0.85) & 0.838 & 0.000 & --\\
+Earlier & Forecast-normalized error & 0.354 & 0.636 & 0.620\\
+Earlier & Contract excess & 0.417 & 0.680 & 0.618\\
+L1 + adapter & Mean absolute error & 0.845 & 0.000 & --\\
+L1 + adapter & Error quantile (0.85) & 0.838 & 0.000 & --\\
+L1 + adapter & Forecast-normalized error & 0.484 & 0.802 & 0.622\\
+L1 + adapter & Contract excess & 0.489 & 0.863 & 0.625\\
+\bottomrule
+\end{tabular}
+\end{table}
